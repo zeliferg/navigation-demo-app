@@ -19,13 +19,22 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {navPatterns.map((pattern) => (
-            <button
+            <div
               key={pattern.id}
               onClick={() => onSelectPattern(pattern.id)}
               className="text-left rounded-lg border border-slate-300 overflow-hidden hover:shadow-lg hover:border-slate-400 transition-all cursor-pointer group"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  onSelectPattern(pattern.id);
+                }
+              }}
             >
-              <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-8 group-hover:from-blue-200 group-hover:to-purple-200 transition-colors min-h-32 flex items-center justify-center">
-                <pattern.component />
+              <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-8 group-hover:from-blue-200 group-hover:to-purple-200 transition-colors min-h-32 flex items-center justify-center pointer-events-none">
+                <div className="text-slate-600 font-semibold text-center">
+                  {pattern.label} Preview
+                </div>
               </div>
               <div className="p-6">
                 <h2 className="text-xl font-semibold text-slate-900 mb-2">
@@ -33,7 +42,7 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
                 </h2>
                 <p className="text-slate-600">{pattern.descriptor}</p>
               </div>
-            </button>
+            </div>
           ))}
         </div>
       </div>
