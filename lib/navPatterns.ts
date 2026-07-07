@@ -1,5 +1,5 @@
 import { ComponentType } from 'react';
-import PatternA from '@/components/navs/pattern-a/PatternA';
+import PatternANav from '@/components/navs/pattern-a/PatternANav';
 import PatternB from '@/components/navs/pattern-b/PatternB';
 import PatternC from '@/components/navs/pattern-c/PatternC';
 import PatternD from '@/components/navs/pattern-d/PatternD';
@@ -15,8 +15,8 @@ export const navPatterns: NavPattern[] = [
   {
     id: 'pattern-a',
     label: 'Pattern A',
-    descriptor: 'Horizontal top navigation with dropdown menus',
-    component: PatternA,
+    descriptor: 'Sidebar with context switcher — collapsible left nav + top bar',
+    component: PatternANav,
   },
   {
     id: 'pattern-b',

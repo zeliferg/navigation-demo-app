@@ -61,24 +61,26 @@ export default function CompareView() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-x divide-slate-200">
-        <div className="flex flex-col">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-0 divide-x divide-slate-200 h-[calc(100vh-120px)]">
+        <div className="flex flex-col min-h-0">
           <div className="p-4 bg-slate-100 border-b border-slate-200">
             <h3 className="font-semibold text-slate-900">{patternA.label}</h3>
           </div>
-          <patternA.component />
-          <div className="flex-1">
-            <GridBody />
+          <div className="flex-1 overflow-hidden">
+            <patternA.component>
+              <GridBody />
+            </patternA.component>
           </div>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col min-h-0">
           <div className="p-4 bg-slate-100 border-b border-slate-200">
             <h3 className="font-semibold text-slate-900">{patternB.label}</h3>
           </div>
-          <patternB.component />
-          <div className="flex-1">
-            <GridBody />
+          <div className="flex-1 overflow-hidden">
+            <patternB.component>
+              <GridBody />
+            </patternB.component>
           </div>
         </div>
       </div>

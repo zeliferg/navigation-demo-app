@@ -21,9 +21,8 @@ export default function SingleView({ patternId }: SingleViewProps) {
   const NavComponent = pattern.component;
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <NavComponent />
+    <NavComponent>
       <GridBody />
-    </div>
+    </NavComponent>
   );
 }
