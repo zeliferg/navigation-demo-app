@@ -17,50 +17,43 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <header className="sticky top-0 z-10 bg-white border-b border-slate-200 shadow-sm">
-        <div className="max-w-full px-6 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-slate-900">
-              Navigation Demo
-            </h1>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setMode('overview')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                mode === 'overview'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-              }`}
-            >
-              Overview
-            </button>
-            <button
-              onClick={() => setMode('single')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                mode === 'single'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-              }`}
-            >
-              Single View
-            </button>
-            <button
-              onClick={() => setMode('compare')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                mode === 'compare'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-              }`}
-            >
-              Compare
-            </button>
-          </div>
+    <div className="min-h-screen flex flex-col">
+      <header className="sticky top-0 z-10 bg-[#f5f5f7] border-b border-[#e5e5ea] flex items-center px-6" style={{ height: '48px' }}>
+        <div className="flex gap-1 bg-white rounded-full p-1 border border-[#e5e5ea]">
+          <button
+            onClick={() => setMode('overview')}
+            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+              mode === 'overview'
+                ? 'bg-blue-600 text-white'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Overview
+          </button>
+          <button
+            onClick={() => setMode('single')}
+            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+              mode === 'single'
+                ? 'bg-blue-600 text-white'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Single View
+          </button>
+          <button
+            onClick={() => setMode('compare')}
+            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+              mode === 'compare'
+                ? 'bg-blue-600 text-white'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Compare
+          </button>
         </div>
       </header>
 
-      <main>
+      <main className="flex-1 overflow-hidden">
         {mode === 'overview' && (
           <Overview onSelectPattern={handleSelectPattern} />
         )}
