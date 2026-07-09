@@ -1,6 +1,9 @@
 "use client";
 
-import { ReactNode } from "react";
+import GridOnIcon from "@mui/icons-material/GridOn";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CompareIcon from "@mui/icons-material/Compare";
+import { navPatterns } from "@/lib/navPatterns";
 
 export type ViewMode = "overview" | "single" | "compare";
 
@@ -12,12 +15,10 @@ interface SwitcherRailProps {
 }
 
 const modes = [
-  { id: "overview", label: "Overview", icon: "📊" },
-  { id: "single", label: "Single", icon: "▭" },
-  { id: "compare", label: "Compare", icon: "⊞" },
+  { id: "overview", label: "Overview", Icon: GridOnIcon },
+  { id: "single", label: "Single", Icon: CheckBoxOutlineBlankIcon },
+  { id: "compare", label: "Compare", Icon: CompareIcon },
 ];
-
-const patterns = ["A", "B", "C", "D"];
 
 export default function SwitcherRail({
   currentMode,
@@ -25,23 +26,23 @@ export default function SwitcherRail({
   selectedPatterns,
   onPatternsChange,
 }: SwitcherRailProps) {
-  const handlePatternToggle = (pattern: string) => {
+  const handlePatternToggle = (patternId: string) => {
     if (currentMode === "single") {
-      onPatternsChange([pattern]);
+      onPatternsChange([patternId]);
     } else if (currentMode === "compare") {
-      if (selectedPatterns.includes(pattern)) {
-        onPatternsChange(selectedPatterns.filter((p) => p !== pattern));
+      if (selectedPatterns.includes(patternId)) {
+        onPatternsChange(selectedPatterns.filter((p) => p !== patternId));
       } else if (selectedPatterns.length < 2) {
-        onPatternsChange([...selectedPatterns, pattern]);
+        onPatternsChange([...selectedPatterns, patternId]);
       }
     }
   };
 
-  const isPatternDisabled = (pattern: string) => {
-    if (currentMode === "overview" || currentMode !== "single" && currentMode !== "compare") {
+  const isPatternDisabled = (patternId: string) => {
+    if (currentMode === "overview" || (currentMode !== "single" && currentMode !== "compare")) {
       return true;
     }
-    if (currentMode === "compare" && !selectedPatterns.includes(pattern)) {
+    if (currentMode === "compare" && !selectedPatterns.includes(patternId)) {
       return selectedPatterns.length >= 2;
     }
     return false;
@@ -56,64 +57,66 @@ export default function SwitcherRail({
     >
       {/* Mode Group */}
       <div className="flex gap-4 items-center">
-        {modes.map((mode) => (
-          <button
-            key={mode.id}
-            onClick={() => onModeChange(mode.id as ViewMode)}
-            className="flex flex-col items-center gap-1 w-12"
-          >
-            <div
-              className="w-12 h-12 flex items-center justify-center rounded-[12px] border-[0.5px] border-solid shadow-[0px_2px_6.8px_0px_rgba(0,0,0,0.1)] transition-colors"
-              style={{
-                backgroundColor:
-                  currentMode === mode.id ? "#212121" : "#FFFFFF",
-                borderColor:
-                  currentMode === mode.id ? "white" : "#D1D1D1",
-              }}
+        {modes.map((mode) => {
+          const Icon = mode.Icon;
+          const isActive = currentMode === mode.id;
+          return (
+            <button
+              key={mode.id}
+              onClick={() => onModeChange(mode.id as ViewMode)}
+              className="flex flex-col items-center gap-1 w-12"
             >
-              <span
-                className="text-2xl transition-colors"
+              <div
+                className="w-12 h-12 flex items-center justify-center rounded-[12px] border-[0.5px] border-solid shadow-[0px_2px_6.8px_0px_rgba(0,0,0,0.1)] transition-colors"
                 style={{
-                  color: currentMode === mode.id ? "white" : "#212121",
+                  backgroundColor: isActive ? "#212121" : "#FFFFFF",
+                  borderColor: isActive ? "white" : "#D1D1D1",
                 }}
               >
-                {mode.icon}
+                <Icon
+                  sx={{
+                    fontSize: 24,
+                    color: isActive ? "white" : "#212121",
+                    transition: "color 0.2s",
+                  }}
+                />
+              </div>
+              <span
+                className="text-xs text-center leading-none transition-colors"
+                style={{
+                  color: "#212121",
+                  fontWeight: isActive ? 500 : 400,
+                  fontFamily: "Roboto, sans-serif",
+                }}
+              >
+                {mode.label}
               </span>
-            </div>
-            <span
-              className="text-xs text-center font-roboto leading-none transition-colors"
-              style={{
-                color: "#212121",
-                fontWeight: currentMode === mode.id ? 500 : 400,
-                fontFamily: "Roboto, sans-serif",
-              }}
-            >
-              {mode.label}
-            </span>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
 
       {/* Divider */}
       <div
-        className="w-px"
+        className="h-12"
         style={{
-          height: "48.5px",
+          width: "1px",
           backgroundColor: "#D1D1D1",
+          marginBottom: "4px",
         }}
       />
 
       {/* Pattern Group (only shown in Single/Compare modes) */}
       {showPatternGroup && (
         <div className="flex gap-4 items-center">
-          {patterns.map((pattern) => {
-            const isActive = selectedPatterns.includes(pattern);
-            const isDisabled = isPatternDisabled(pattern);
+          {navPatterns.map((pattern) => {
+            const isActive = selectedPatterns.includes(pattern.id);
+            const isDisabled = isPatternDisabled(pattern.id);
 
             return (
               <button
-                key={pattern}
-                onClick={() => handlePatternToggle(pattern)}
+                key={pattern.id}
+                onClick={() => handlePatternToggle(pattern.id)}
                 disabled={isDisabled}
                 className="flex flex-col items-center gap-1 w-12 transition-opacity"
                 style={{
@@ -124,15 +127,13 @@ export default function SwitcherRail({
                 <div
                   className="w-12 h-12 flex items-center justify-center rounded-[12px] border-[0.5px] border-solid shadow-[0px_2px_6.8px_0px_rgba(0,0,0,0.1)] transition-colors font-semibold text-sm"
                   style={{
-                    backgroundColor:
-                      isActive ? "#212121" : "#FFFFFF",
-                    borderColor:
-                      isActive ? "white" : "#D1D1D1",
+                    backgroundColor: isActive ? "#212121" : "#FFFFFF",
+                    borderColor: isActive ? "white" : "#D1D1D1",
                     color: isActive ? "white" : "#212121",
                     pointerEvents: isDisabled ? "none" : "auto",
                   }}
                 >
-                  {pattern}
+                  {pattern.label}
                 </div>
                 <span
                   className="text-xs text-center leading-none"
@@ -142,7 +143,7 @@ export default function SwitcherRail({
                     fontFamily: "Roboto, sans-serif",
                   }}
                 >
-                  {pattern}
+                  {pattern.label}
                 </span>
               </button>
             );
