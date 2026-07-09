@@ -316,8 +316,8 @@ export default function PatternANav({ children }: PatternANavProps) {
           {switcherOpen && (
             <div
               className={`absolute ${
-                expanded ? "left-[13px] right-[13px]" : "left-2 w-[404px]"
-              } top-full mt-1 z-50 bg-white border border-[#E9ECEE] rounded-lg shadow-[0px_3px_10px_0px_rgba(0,0,0,0.1)] p-4 flex flex-col gap-4`}
+                expanded ? "left-[13px]" : "left-2"
+              } w-[436px] top-full mt-1 z-50 bg-white border border-[#E9ECEE] rounded-lg shadow-[0px_3px_20px_-2px_rgba(0,0,0,0.1)] p-4 flex flex-col gap-4`}
             >
               {/* Search */}
               <div className="flex items-center justify-between gap-2 border border-[#1A7BD9] rounded-lg px-[14px] py-[7px]">
@@ -332,7 +332,7 @@ export default function PatternANav({ children }: PatternANavProps) {
               </div>
 
               {/* Select State (static, non-functional per scope) */}
-              <div className="flex items-center justify-between gap-2 border border-[#C7CFCE] rounded-lg px-[14px] py-[7px] -mt-2">
+              <div className="flex items-center justify-between gap-2 border border-[#C7CFCE] rounded-lg px-[14px] py-[7px]">
                 <span className="text-[14px] text-[#202227]">Select State</span>
                 <img src="/nav-patterns/pattern-a/chevron-down.svg" alt="" className="w-6 h-6 flex-shrink-0" />
               </div>
@@ -390,7 +390,7 @@ export default function PatternANav({ children }: PatternANavProps) {
                 type="button"
                 disabled={selectedPropertyIds.length === 0}
                 onClick={() => setSwitcherOpen(false)}
-                className={`w-full rounded-lg py-3 text-[16px] font-bold text-white tracking-[0.16px] ${TRANSITION} ${
+                className={`w-full rounded-lg py-3 text-[16px] text-center font-bold text-white tracking-[0.16px] ${TRANSITION} ${
                   selectedPropertyIds.length === 0 ? "bg-[#ACB8B8] cursor-not-allowed" : "bg-[#1A7BD9]"
                 }`}
               >
