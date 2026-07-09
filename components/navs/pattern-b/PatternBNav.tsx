@@ -267,6 +267,35 @@ function NavTree({
   );
 }
 
+function AccountMenuPopup({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="absolute bottom-full left-0 mb-2 w-[293px] bg-white rounded-[6px] p-2 flex flex-col shadow-[0px_1px_5px_0px_rgba(0,0,0,0.12),0px_4px_2.5px_0px_rgba(0,0,0,0.14),0px_2px_2px_0px_rgba(0,0,0,0.2)] z-50">
+      {accountMenuItems.map((item) => (
+        <button
+          key={item.label}
+          type="button"
+          onClick={onClose}
+          className={`flex items-center gap-2 h-11 p-2 rounded w-full ${TRANSITION} ${HOVER_BG}`}
+        >
+          <img src={item.icon} alt="" className="w-6 h-6 flex-shrink-0" />
+          <span className="text-[16px] text-[rgba(0,0,0,0.87)] tracking-[0.5px] truncate text-left">
+            {item.label}
+          </span>
+        </button>
+      ))}
+      <div className="h-px w-full bg-black/10 my-1" />
+      <button
+        type="button"
+        onClick={onClose}
+        className={`flex items-center gap-2 h-11 p-2 rounded w-full ${TRANSITION} ${HOVER_BG}`}
+      >
+        <img src="/nav-patterns/pattern-b/logout.svg" alt="" className="w-6 h-6 flex-shrink-0" />
+        <span className="text-[16px] text-[rgba(0,0,0,0.87)] tracking-[0.5px] truncate text-left">Logout</span>
+      </button>
+    </div>
+  );
+}
+
 function TopNavRow({
   icon,
   label,
@@ -472,64 +501,36 @@ export default function PatternBNav({ children }: PatternBNavProps) {
         </nav>
 
         {/* Profile section - pinned to bottom, outside the scrolling nav so it stays visible */}
-        <div ref={accountMenuRef} className={`relative flex-shrink-0 flex flex-col gap-2 pb-[10px] ${expanded ? "" : "items-center"}`}>
+        <div ref={accountMenuRef} className={`flex-shrink-0 flex flex-col gap-2 pb-[10px] ${expanded ? "" : "items-center"}`}>
           <div className="h-px w-full bg-black/10" />
           {expanded ? (
-            <button
-              type="button"
-              onClick={() => setAccountMenuOpen((prev) => !prev)}
-              className="flex items-center gap-2 px-2 h-10 w-full"
-            >
+            <div className="flex items-center gap-2 px-2 h-10 w-full">
               <img src="/nav-patterns/pattern-b/generic-avatar.svg" alt="" className="w-8 h-8 flex-shrink-0" />
               <span className="flex-1 text-[16px] text-[#121826] truncate text-left">Account Name</span>
-              <span
-                className={`flex items-center justify-center w-10 h-10 rounded-[6px] flex-shrink-0 ${TRANSITION} ${
-                  accountMenuOpen ? "bg-[#EAF2FD]" : ""
-                }`}
-              >
-                <img src="/nav-patterns/pattern-b/more-horiz.svg" alt="" className="w-6 h-6" />
-              </span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setAccountMenuOpen((prev) => !prev)}
-              className="flex items-center justify-center h-10 w-full"
-            >
-              <img src="/nav-patterns/pattern-b/generic-avatar.svg" alt="" className="w-8 h-8 flex-shrink-0" />
-            </button>
-          )}
-
-          {accountMenuOpen && (
-            <div
-              className={`absolute bottom-full ${
-                expanded ? "right-0" : "left-full"
-              } mb-2 w-[293px] bg-white rounded-[6px] p-2 flex flex-col shadow-[0px_1px_5px_0px_rgba(0,0,0,0.12),0px_4px_2.5px_0px_rgba(0,0,0,0.14),0px_2px_2px_0px_rgba(0,0,0,0.2)] z-50`}
-            >
-              {accountMenuItems.map((item) => (
+              {/* Trigger - the menu anchors to this element specifically, not the row */}
+              <div className="relative flex-shrink-0">
                 <button
-                  key={item.label}
                   type="button"
-                  onClick={() => setAccountMenuOpen(false)}
-                  className={`flex items-center gap-2 h-11 p-2 rounded w-full ${TRANSITION} ${HOVER_BG}`}
+                  onClick={() => setAccountMenuOpen((prev) => !prev)}
+                  className={`flex items-center justify-center w-10 h-10 rounded-[6px] ${TRANSITION} ${
+                    accountMenuOpen ? "bg-[#EAF2FD]" : ""
+                  }`}
                 >
-                  <img src={item.icon} alt="" className="w-6 h-6 flex-shrink-0" />
-                  <span className="text-[16px] text-[rgba(0,0,0,0.87)] tracking-[0.5px] truncate text-left">
-                    {item.label}
-                  </span>
+                  <img src="/nav-patterns/pattern-b/more-horiz.svg" alt="" className="w-6 h-6" />
                 </button>
-              ))}
-              <div className="h-px w-full bg-black/10 my-1" />
+                {accountMenuOpen && <AccountMenuPopup onClose={() => setAccountMenuOpen(false)} />}
+              </div>
+            </div>
+          ) : (
+            <div className="relative">
               <button
                 type="button"
-                onClick={() => setAccountMenuOpen(false)}
-                className={`flex items-center gap-2 h-11 p-2 rounded w-full ${TRANSITION} ${HOVER_BG}`}
+                onClick={() => setAccountMenuOpen((prev) => !prev)}
+                className="flex items-center justify-center h-10 w-10"
               >
-                <img src="/nav-patterns/pattern-b/logout.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-                <span className="text-[16px] text-[rgba(0,0,0,0.87)] tracking-[0.5px] truncate text-left">
-                  Logout
-                </span>
+                <img src="/nav-patterns/pattern-b/generic-avatar.svg" alt="" className="w-8 h-8 flex-shrink-0" />
               </button>
+              {accountMenuOpen && <AccountMenuPopup onClose={() => setAccountMenuOpen(false)} />}
             </div>
           )}
         </div>
