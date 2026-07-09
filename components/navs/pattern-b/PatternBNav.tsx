@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Roboto } from "next/font/google";
 
 const roboto = Roboto({
@@ -133,6 +133,16 @@ const utilitiesItems: { id: string; label: string; icon: string; children?: (Nav
     ],
   },
   { id: "documentation", label: "Documentation", icon: "/nav-patterns/pattern-b/help.svg" },
+];
+
+// Account settings menu, pulled from node 59:8406. Divider before "Logout" only.
+const accountMenuItems = [
+  { label: "User Settings", icon: "/nav-patterns/pattern-b/settings.svg" },
+  { label: "Mission Settings", icon: "/nav-patterns/pattern-b/build.svg" },
+  { label: "User Administration", icon: "/nav-patterns/pattern-b/user-admin.svg" },
+  { label: "API Query Builder", icon: "/nav-patterns/pattern-b/arrow-outward.svg" },
+  { label: "Contact Us", icon: "/nav-patterns/pattern-b/call.svg" },
+  { label: "Release Notes", icon: "/nav-patterns/pattern-b/chat.svg" },
 ];
 
 // States read from the Figma "Nav Main Categories Desktop" states sheet (52:6908),
@@ -319,6 +329,21 @@ export default function PatternBNav({ children }: PatternBNavProps) {
   const [expanded, setExpanded] = useState(true);
   const [activeId, setActiveId] = useState("dashboard");
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const accountMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!accountMenuOpen) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target as Node)) {
+        setAccountMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, [accountMenuOpen]);
 
   const toggleGroup = (id: string) => {
     setOpenGroups((prev) => {
@@ -377,7 +402,7 @@ export default function PatternBNav({ children }: PatternBNavProps) {
       <aside
         className={`relative ${
           expanded ? "w-[296px]" : "w-[64px]"
-        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden`}
+        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] flex flex-col overflow-visible`}
       >
         {/* Logo */}
         {expanded ? (
@@ -447,17 +472,64 @@ export default function PatternBNav({ children }: PatternBNavProps) {
         </nav>
 
         {/* Profile section - pinned to bottom, outside the scrolling nav so it stays visible */}
-        <div className={`flex-shrink-0 flex flex-col gap-2 pb-[10px] ${expanded ? "" : "items-center"}`}>
+        <div ref={accountMenuRef} className={`relative flex-shrink-0 flex flex-col gap-2 pb-[10px] ${expanded ? "" : "items-center"}`}>
           <div className="h-px w-full bg-black/10" />
           {expanded ? (
-            <div className="flex items-center gap-2 px-2 h-10">
+            <button
+              type="button"
+              onClick={() => setAccountMenuOpen((prev) => !prev)}
+              className="flex items-center gap-2 px-2 h-10 w-full"
+            >
               <img src="/nav-patterns/pattern-b/generic-avatar.svg" alt="" className="w-8 h-8 flex-shrink-0" />
-              <span className="flex-1 text-[16px] text-[#121826] truncate">Account Name</span>
-              <img src="/nav-patterns/pattern-b/more-horiz.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-            </div>
+              <span className="flex-1 text-[16px] text-[#121826] truncate text-left">Account Name</span>
+              <span
+                className={`flex items-center justify-center w-10 h-10 rounded-[6px] flex-shrink-0 ${TRANSITION} ${
+                  accountMenuOpen ? "bg-[#EAF2FD]" : ""
+                }`}
+              >
+                <img src="/nav-patterns/pattern-b/more-horiz.svg" alt="" className="w-6 h-6" />
+              </span>
+            </button>
           ) : (
-            <div className="flex items-center justify-center h-10 w-full">
+            <button
+              type="button"
+              onClick={() => setAccountMenuOpen((prev) => !prev)}
+              className="flex items-center justify-center h-10 w-full"
+            >
               <img src="/nav-patterns/pattern-b/generic-avatar.svg" alt="" className="w-8 h-8 flex-shrink-0" />
+            </button>
+          )}
+
+          {accountMenuOpen && (
+            <div
+              className={`absolute bottom-full ${
+                expanded ? "right-0" : "left-full"
+              } mb-2 w-[293px] bg-white rounded-[6px] p-2 flex flex-col shadow-[0px_1px_5px_0px_rgba(0,0,0,0.12),0px_4px_2.5px_0px_rgba(0,0,0,0.14),0px_2px_2px_0px_rgba(0,0,0,0.2)] z-50`}
+            >
+              {accountMenuItems.map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => setAccountMenuOpen(false)}
+                  className={`flex items-center gap-2 h-11 p-2 rounded w-full ${TRANSITION} ${HOVER_BG}`}
+                >
+                  <img src={item.icon} alt="" className="w-6 h-6 flex-shrink-0" />
+                  <span className="text-[16px] text-[rgba(0,0,0,0.87)] tracking-[0.5px] truncate text-left">
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+              <div className="h-px w-full bg-black/10 my-1" />
+              <button
+                type="button"
+                onClick={() => setAccountMenuOpen(false)}
+                className={`flex items-center gap-2 h-11 p-2 rounded w-full ${TRANSITION} ${HOVER_BG}`}
+              >
+                <img src="/nav-patterns/pattern-b/logout.svg" alt="" className="w-6 h-6 flex-shrink-0" />
+                <span className="text-[16px] text-[rgba(0,0,0,0.87)] tracking-[0.5px] truncate text-left">
+                  Logout
+                </span>
+              </button>
             </div>
           )}
         </div>
