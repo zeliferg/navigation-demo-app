@@ -238,9 +238,9 @@ export default function PatternANav({ children }: PatternANavProps) {
     <div className={`${mulish.className} flex h-screen w-full bg-[#F8FAFB] border border-[#E9ECEE]`}>
       {/* Sidebar */}
       <aside
-        className={`${
-          expanded ? "w-[296px]" : "w-[56px]"
-        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white border-r border-[#E9ECEE] shadow-[0px_0px_20px_0px_rgba(94,98,120,0.04)] flex flex-col gap-6 py-[14px] overflow-visible`}
+        className={`w-full ${
+          expanded ? "max-w-[296px]" : "max-w-[56px]"
+        } transition-[max-width] duration-200 ease-in-out bg-white border-r border-[#E9ECEE] shadow-[0px_0px_20px_0px_rgba(94,98,120,0.04)] flex flex-col gap-6 py-[14px] overflow-visible`}
       >
         {/* Logo */}
         <div className={`flex items-center h-14 ${expanded ? "justify-between px-6" : "justify-center px-4"}`}>
@@ -317,7 +317,7 @@ export default function PatternANav({ children }: PatternANavProps) {
             <div
               className={`absolute ${
                 expanded ? "left-[13px]" : "left-2"
-              } w-[436px] top-full mt-1 z-50 bg-white border border-[#E9ECEE] rounded-lg shadow-[0px_3px_20px_-2px_rgba(0,0,0,0.1)] p-4 flex flex-col gap-4`}
+              } w-[min(436px,calc(100vw-2rem))] top-full mt-1 z-50 bg-white border border-[#E9ECEE] rounded-lg shadow-[0px_3px_20px_-2px_rgba(0,0,0,0.1)] p-4 flex flex-col gap-4`}
             >
               {/* Search */}
               <div className="flex items-center justify-between gap-2 border border-[#1A7BD9] rounded-lg px-[14px] py-[7px]">
@@ -500,7 +500,7 @@ export default function PatternANav({ children }: PatternANavProps) {
                 />
               </button>
               {openDropdown === "language" && (
-                <div className={`${POPOVER_BASE} ${POPOVER_LARGE_SHADOW} w-[218px] p-6 flex flex-col gap-4`}>
+                <div className={`${POPOVER_BASE} ${POPOVER_LARGE_SHADOW} w-[min(218px,calc(100vw-2rem))] p-6 flex flex-col gap-4`}>
                   {languages.map((lang) => (
                     <button
                       key={lang.code}
@@ -540,7 +540,7 @@ export default function PatternANav({ children }: PatternANavProps) {
                 />
               </button>
               {openDropdown === "help" && (
-                <div className={`${POPOVER_BASE} ${POPOVER_LARGE_SHADOW} w-[329px] py-8 flex flex-col gap-6`}>
+                <div className={`${POPOVER_BASE} ${POPOVER_LARGE_SHADOW} w-[min(329px,calc(100vw-2rem))] py-8 flex flex-col gap-6`}>
                   <div className="flex flex-col">
                     <div className="flex items-start gap-[10px] px-8 w-full">
                       <p className="flex-1 font-bold text-[22px] leading-[1.2] text-[#2A3440]">Need any help?</p>
@@ -583,7 +583,7 @@ export default function PatternANav({ children }: PatternANavProps) {
                 />
               </button>
               {openDropdown === "notifications" && (
-                <div className={`${POPOVER_BASE} ${POPOVER_SMALL_SHADOW} w-[290px] pt-4 pb-8 flex flex-col`}>
+                <div className={`${POPOVER_BASE} ${POPOVER_SMALL_SHADOW} w-[min(290px,calc(100vw-2rem))] pt-4 pb-8 flex flex-col`}>
                   <div className="flex items-center justify-between px-6 py-2">
                     <p className="text-[18px] font-normal text-[#2A3440]">Notifications</p>
                     <button
@@ -642,7 +642,7 @@ export default function PatternANav({ children }: PatternANavProps) {
                 />
               </button>
               {openDropdown === "account" && (
-                <div className={`${POPOVER_BASE} ${POPOVER_SMALL_SHADOW} w-[290px] p-4 flex flex-col gap-4`}>
+                <div className={`${POPOVER_BASE} ${POPOVER_SMALL_SHADOW} w-[min(290px,calc(100vw-2rem))] p-4 flex flex-col gap-4`}>
                   <div className="flex gap-3 items-start pr-[10px] py-[10px]">
                     <div className="w-12 h-12 rounded-full bg-[#ECF5FF] flex items-center justify-center flex-shrink-0">
                       <img src="/nav-patterns/pattern-a/avatar-icon.svg" alt="" className="w-5 h-5" />

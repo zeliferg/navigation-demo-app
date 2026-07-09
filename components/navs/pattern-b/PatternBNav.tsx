@@ -269,7 +269,7 @@ function NavTree({
 
 function AccountMenuPopup({ onClose }: { onClose: () => void }) {
   return (
-    <div className="absolute bottom-full left-0 mb-2 w-[293px] bg-white rounded-[6px] p-2 flex flex-col shadow-[0px_1px_5px_0px_rgba(0,0,0,0.12),0px_4px_2.5px_0px_rgba(0,0,0,0.14),0px_2px_2px_0px_rgba(0,0,0,0.2)] z-50">
+    <div className="absolute bottom-full left-0 mb-2 w-[min(293px,calc(100vw-2rem))] bg-white rounded-[6px] p-2 flex flex-col shadow-[0px_1px_5px_0px_rgba(0,0,0,0.12),0px_4px_2.5px_0px_rgba(0,0,0,0.14),0px_2px_2px_0px_rgba(0,0,0,0.2)] z-50">
       {accountMenuItems.map((item) => (
         <button
           key={item.label}
@@ -429,9 +429,9 @@ export default function PatternBNav({ children }: PatternBNavProps) {
     <div className={`${roboto.className} flex h-screen w-full bg-[#F5F5F5]`}>
       {/* Sidebar */}
       <aside
-        className={`relative ${
-          expanded ? "w-[296px]" : "w-[64px]"
-        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] flex flex-col overflow-visible`}
+        className={`relative w-full ${
+          expanded ? "max-w-[296px]" : "max-w-[64px]"
+        } transition-[max-width] duration-200 ease-in-out bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] flex flex-col overflow-visible`}
       >
         {/* Logo */}
         {expanded ? (
