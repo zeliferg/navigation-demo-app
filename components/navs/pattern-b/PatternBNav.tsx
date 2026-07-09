@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Roboto } from "next/font/google";
 
 const roboto = Roboto({
@@ -29,20 +32,43 @@ const utilitiesItems = [
   { label: "Documentation", icon: "/nav-patterns/pattern-b/help.svg", expandable: false },
 ];
 
+// States read from the Figma "Nav Main Categories Desktop" states sheet (52:6908),
+// Dashboard item: Default (52:7118), Hover (52:7129), Selected (52:7150).
+// Default: no bg. Hover: bg rgba(0,61,120,0.1), text unchanged. Selected: bg #E3EBF8
+// (matching the actual nav instance's literal value), text #003D78. Icon never changes.
+const HOVER_BG = "hover:bg-[rgba(0,61,120,0.1)]";
+const TRANSITION = "transition-colors duration-150";
+
 function NavRow({
   icon,
   label,
   active = false,
   expandable = false,
+  expanded,
 }: {
   icon: string;
   label: string;
   active?: boolean;
   expandable?: boolean;
+  expanded: boolean;
 }) {
+  if (!expanded) {
+    return (
+      <div
+        className={`flex items-center justify-center w-full h-11 p-2 rounded ${TRANSITION} ${
+          active ? "bg-[#E3EBF8]" : HOVER_BG
+        }`}
+      >
+        <img src={icon} alt="" className="w-6 h-6 flex-shrink-0" />
+      </div>
+    );
+  }
+
   return (
     <div
-      className={`flex items-center gap-2 px-4 py-2 rounded-lg w-full ${active ? "bg-[#E3EBF8]" : ""}`}
+      className={`flex items-center gap-2 px-4 py-2 rounded-lg w-full ${TRANSITION} ${
+        active ? "bg-[#E3EBF8]" : HOVER_BG
+      }`}
     >
       <img src={icon} alt="" className="w-6 h-6 flex-shrink-0" />
       <div className="flex-1 min-w-0 py-1">
@@ -66,51 +92,108 @@ function NavRow({
 }
 
 export default function PatternBNav({ children }: PatternBNavProps) {
+  const [expanded, setExpanded] = useState(true);
+
   return (
     <div className={`${roboto.className} flex h-screen w-full bg-[#F5F5F5]`}>
       {/* Sidebar */}
-      <aside className="relative w-[296px] flex-shrink-0 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] flex flex-col overflow-y-auto">
+      <aside
+        className={`relative ${
+          expanded ? "w-[296px]" : "w-[64px]"
+        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] flex flex-col overflow-y-auto overflow-x-hidden`}
+      >
         {/* Logo */}
-        <div className="flex items-center justify-between pl-4 pr-[5px] pt-[11px] pb-[27px] h-[34px] box-content">
-          <span className="font-medium text-[16px] tracking-[0.17px] text-[#003D78]">Placeholder Logo</span>
-          <img src="/nav-patterns/pattern-b/stat-minus-2.svg" alt="" className="w-6 h-6 rotate-90" />
-        </div>
+        {expanded ? (
+          <div className="flex items-center justify-between pl-4 pr-[5px] pt-[11px] pb-[27px] h-[34px] box-content">
+            <span className="font-medium text-[16px] tracking-[0.17px] text-[#003D78] whitespace-nowrap">
+              Placeholder Logo
+            </span>
+            <button
+              type="button"
+              onClick={() => setExpanded(false)}
+              aria-label="Collapse sidebar"
+              className="flex-shrink-0"
+            >
+              <img src="/nav-patterns/pattern-b/stat-minus-2.svg" alt="" className="w-6 h-6 rotate-90" />
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center pt-[11px] pb-[27px] gap-3">
+            <button
+              type="button"
+              onClick={() => setExpanded(true)}
+              aria-label="Expand sidebar"
+              className="flex-shrink-0"
+            >
+              <img src="/nav-patterns/pattern-b/stat-minus-2.svg" alt="" className="w-6 h-6 -rotate-90" />
+            </button>
+            <div className="h-px w-full bg-black/10" />
+          </div>
+        )}
 
         {/* Nav list */}
-        <nav className="flex flex-col px-2 pb-2">
+        <nav className={`flex flex-col pb-2 ${expanded ? "px-2" : "px-1"}`}>
           <div className="flex flex-col pb-2">
             {topItems.map((item) => (
-              <NavRow key={item.label} icon={item.icon} label={item.label} active={item.active} />
+              <NavRow
+                key={item.label}
+                icon={item.icon}
+                label={item.label}
+                active={item.active}
+                expanded={expanded}
+              />
             ))}
           </div>
 
           <div className="flex flex-col pb-2">
-            <div className="px-4 py-1">
-              <span className="font-medium text-[16px] tracking-[0.15px] text-[#121826]">Services</span>
-            </div>
+            {expanded && (
+              <div className="px-4 py-1">
+                <span className="font-medium text-[16px] tracking-[0.15px] text-[#121826]">Services</span>
+              </div>
+            )}
             {servicesItems.map((item) => (
-              <NavRow key={item.label} icon={item.icon} label={item.label} expandable={item.expandable} />
+              <NavRow
+                key={item.label}
+                icon={item.icon}
+                label={item.label}
+                expandable={item.expandable}
+                expanded={expanded}
+              />
             ))}
           </div>
 
           <div className="flex flex-col">
-            <div className="px-4 py-1">
-              <span className="font-medium text-[16px] tracking-[0.15px] text-[#121826]">Utilities</span>
-            </div>
+            {expanded && (
+              <div className="px-4 py-1">
+                <span className="font-medium text-[16px] tracking-[0.15px] text-[#121826]">Utilities</span>
+              </div>
+            )}
             {utilitiesItems.map((item) => (
-              <NavRow key={item.label} icon={item.icon} label={item.label} expandable={item.expandable} />
+              <NavRow
+                key={item.label}
+                icon={item.icon}
+                label={item.label}
+                expandable={item.expandable}
+                expanded={expanded}
+              />
             ))}
           </div>
         </nav>
 
         {/* Profile section - pinned to bottom */}
-        <div className="mt-auto flex flex-col gap-2 pb-[10px]">
+        <div className={`mt-auto flex flex-col gap-2 pb-[10px] ${expanded ? "" : "items-center"}`}>
           <div className="h-px w-full bg-black/10" />
-          <div className="flex items-center gap-2 px-2 h-10">
-            <img src="/nav-patterns/pattern-b/generic-avatar.svg" alt="" className="w-8 h-8 flex-shrink-0" />
-            <span className="flex-1 text-[16px] text-[#121826] truncate">Account Name</span>
-            <img src="/nav-patterns/pattern-b/more-horiz.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-          </div>
+          {expanded ? (
+            <div className="flex items-center gap-2 px-2 h-10">
+              <img src="/nav-patterns/pattern-b/generic-avatar.svg" alt="" className="w-8 h-8 flex-shrink-0" />
+              <span className="flex-1 text-[16px] text-[#121826] truncate">Account Name</span>
+              <img src="/nav-patterns/pattern-b/more-horiz.svg" alt="" className="w-6 h-6 flex-shrink-0" />
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-10 w-full">
+              <img src="/nav-patterns/pattern-b/generic-avatar.svg" alt="" className="w-8 h-8 flex-shrink-0" />
+            </div>
+          )}
         </div>
       </aside>
 
