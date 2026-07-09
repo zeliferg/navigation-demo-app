@@ -56,11 +56,15 @@ export default function SwitcherRail({
 
   return (
     <div
-      className="fixed bottom-8 left-1/2 -translate-x-1/2 backdrop-blur-[6px] bg-white/80 rounded-[16px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.15)] p-4 flex items-center gap-4"
-      style={{ isolation: "isolate" }}
+      className="fixed bottom-8 left-1/2 -translate-x-1/2 backdrop-blur-[6px] bg-white/80 rounded-[16px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.15)] flex items-center"
+      style={{
+        isolation: "isolate",
+        padding: "16px",
+        gap: "16px",
+      }}
     >
       {/* Mode Group */}
-      <div className="flex gap-4 items-center">
+      <div className="flex items-center" style={{ gap: "16px" }}>
         {modes.map((mode) => {
           const Icon = mode.Icon;
           const isActive = currentMode === mode.id;
@@ -68,7 +72,8 @@ export default function SwitcherRail({
             <button
               key={mode.id}
               onClick={() => onModeChange(mode.id as ViewMode)}
-              className="flex flex-col items-center gap-1 w-12"
+              className="flex flex-col items-center w-12"
+              style={{ gap: "4px" }}
             >
               <div
                 className="w-12 h-12 flex items-center justify-center rounded-[12px] border-[0.5px] border-solid shadow-[0px_2px_6.8px_0px_rgba(0,0,0,0.1)] transition-colors"
@@ -111,7 +116,7 @@ export default function SwitcherRail({
       />
 
       {/* Pattern Group (always shown) */}
-      <div className="flex gap-4 items-center">
+      <div className="flex items-center" style={{ gap: "16px" }}>
         {navPatterns.map((pattern) => {
           const isActive = selectedPatterns.includes(pattern.id);
           const isDisabled = isPatternDisabled(pattern.id);
@@ -121,8 +126,9 @@ export default function SwitcherRail({
               key={pattern.id}
               onClick={() => handlePatternToggle(pattern.id)}
               disabled={isDisabled}
-              className="flex flex-col items-center gap-1 w-12 transition-opacity"
+              className="flex flex-col items-center w-12 transition-opacity"
               style={{
+                gap: "4px",
                 opacity: isDisabled ? 0.4 : 1,
                 cursor: isDisabled ? "not-allowed" : "pointer",
               }}

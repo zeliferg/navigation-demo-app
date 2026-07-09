@@ -13,25 +13,25 @@ export interface NavPattern {
 export const navPatterns: NavPattern[] = [
   {
     id: "a",
-    label: "A",
+    label: "Style A",
     descriptor: "Pattern A Navigation",
     component: PatternA,
   },
   {
     id: "b",
-    label: "B",
+    label: "Style B",
     descriptor: "Pattern B Navigation",
     component: PatternB,
   },
   {
     id: "c",
-    label: "C",
+    label: "Style C",
     descriptor: "Pattern C Navigation",
     component: PatternC,
   },
   {
     id: "d",
-    label: "D",
+    label: "Style D",
     descriptor: "Pattern D Navigation",
     component: PatternD,
   },
