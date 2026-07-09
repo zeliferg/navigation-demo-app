@@ -14,25 +14,25 @@ export const navPatterns: NavPattern[] = [
   {
     id: "a",
     label: "Style A",
-    descriptor: "Pattern A Navigation",
+    descriptor: "Left sidebar with a context switcher, for managing multiple accounts.",
     component: PatternA,
   },
   {
     id: "b",
     label: "Style B",
-    descriptor: "Pattern B Navigation",
+    descriptor: "Left sidebar with grouped categories, for dense technical monitoring.",
     component: PatternB,
   },
   {
     id: "c",
     label: "Style C",
-    descriptor: "Pattern C Navigation",
+    descriptor: "Left sidebar with a light footprint, for a dashboard-first experience.",
     component: PatternC,
   },
   {
     id: "d",
     label: "Style D",
-    descriptor: "Pattern D Navigation",
+    descriptor: "Top-only nav with tabs, for flatter, filter-heavy IA.",
     component: PatternD,
   },
 ];

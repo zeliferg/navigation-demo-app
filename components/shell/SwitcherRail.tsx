@@ -56,11 +56,12 @@ export default function SwitcherRail({
 
   return (
     <div
-      className="fixed bottom-8 left-1/2 -translate-x-1/2 backdrop-blur-[6px] bg-white/80 rounded-[16px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.15)] flex items-center"
+      className="fixed left-1/2 -translate-x-1/2 backdrop-blur-[6px] bg-white/80 rounded-[16px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.15)] flex items-center"
       style={{
         isolation: "isolate",
         padding: "16px",
         gap: "16px",
+        bottom: "40px",
       }}
     >
       {/* Mode Group */}

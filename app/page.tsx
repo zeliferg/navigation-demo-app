@@ -10,10 +10,15 @@ export default function Home() {
   const [currentMode, setCurrentMode] = useState<ViewMode>("overview");
   const [selectedPatterns, setSelectedPatterns] = useState<string[]>(["a"]);
 
+  const handleSelectPatternFromOverview = (patternId: string) => {
+    setCurrentMode("single");
+    setSelectedPatterns([patternId]);
+  };
+
   const renderContent = () => {
     switch (currentMode) {
       case "overview":
-        return <Overview />;
+        return <Overview onSelectPattern={handleSelectPatternFromOverview} />;
       case "single":
         return <SingleView selectedPattern={selectedPatterns[0] || "a"} />;
       case "compare":
@@ -29,7 +34,7 @@ export default function Home() {
         selectedPatterns={selectedPatterns}
         onPatternsChange={setSelectedPatterns}
       />
-      <main className="flex-1 overflow-y-auto bg-white pb-32">
+      <main className="flex-1 overflow-y-auto bg-white pb-40">
         {renderContent()}
       </main>
     </div>
