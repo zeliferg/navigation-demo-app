@@ -13,9 +13,13 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
     <div className="w-full">
       {/* 2x2 grid: 1 column (mobile) → 2 columns (desktop) */}
       <div
-        className="mx-auto grid grid-cols-1 md:grid-cols-2 mt-10"
+        className="grid grid-cols-1 md:grid-cols-2"
         style={{
+          marginTop: "40px",
+          marginLeft: "auto",
+          marginRight: "auto",
           gap: "clamp(1rem, 2%, 1.5rem)",
+          maxWidth: "900px",
         }}
       >
         {navPatterns.map((pattern) => {
