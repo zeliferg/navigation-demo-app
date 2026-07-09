@@ -1,6 +1,6 @@
 import PatternANav from "@/components/navs/pattern-a/PatternANav";
 import PatternBNav from "@/components/navs/pattern-b/PatternBNav";
-import PatternC from "@/components/navs/pattern-c/PatternC";
+import PatternCNav from "@/components/navs/pattern-c/PatternCNav";
 import PatternD from "@/components/navs/pattern-d/PatternD";
 
 export interface NavPattern {
@@ -27,7 +27,7 @@ export const navPatterns: NavPattern[] = [
     id: "c",
     label: "Style C",
     descriptor: "Left sidebar with a light footprint, for a dashboard-first experience.",
-    component: PatternC,
+    component: PatternCNav,
   },
   {
     id: "d",
