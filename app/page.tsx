@@ -29,7 +29,7 @@ export default function Home() {
         selectedPatterns={selectedPatterns}
         onPatternsChange={setSelectedPatterns}
       />
-      <main className="flex-1 ml-16 overflow-y-auto bg-white">
+      <main className="flex-1 overflow-y-auto bg-white pb-32">
         {renderContent()}
       </main>
     </div>
