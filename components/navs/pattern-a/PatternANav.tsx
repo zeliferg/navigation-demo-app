@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Mulish } from "next/font/google";
 
 const mulish = Mulish({
@@ -24,102 +27,188 @@ const propertyToolsItems = [
 
 const financialsItems = ["Month End Statements", "Revenue and Deduction", "Revenue Calculator"];
 
+// Property Tools is highlighted collapsed too since its child "Basic Information" is active.
+const propertyToolsGroupActive = propertyToolsItems.some((item) => item.active);
+
 export default function PatternANav({ children }: PatternANavProps) {
+  const [expanded, setExpanded] = useState(true);
+
   return (
     <div className={`${mulish.className} flex h-screen w-full bg-[#F8FAFB] border border-[#E9ECEE]`}>
       {/* Sidebar */}
-      <aside className="w-[296px] flex-shrink-0 bg-white border-r border-[#E9ECEE] shadow-[0px_0px_20px_0px_rgba(94,98,120,0.04)] flex flex-col py-[14px] overflow-y-auto">
+      <aside
+        className={`${
+          expanded ? "w-[296px]" : "w-[56px]"
+        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white border-r border-[#E9ECEE] shadow-[0px_0px_20px_0px_rgba(94,98,120,0.04)] flex flex-col py-[14px] overflow-x-hidden overflow-y-auto`}
+      >
         {/* Logo */}
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="text-[#45A3FF] text-[22px] leading-[0.95]">
-            <p>Placeholder</p>
-            <p>Logo</p>
-          </div>
-          <img src="/nav-patterns/pattern-a/compress.svg" alt="" className="w-6 h-6" />
+        <div className={`flex items-center h-14 ${expanded ? "justify-between px-6" : "justify-center px-4"}`}>
+          {expanded && (
+            <div className="text-[#45A3FF] text-[22px] leading-[0.95] whitespace-nowrap">
+              <p>Placeholder</p>
+              <p>Logo</p>
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => setExpanded((prev) => !prev)}
+            aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}
+            className="flex-shrink-0"
+          >
+            <img
+              src={`/nav-patterns/pattern-a/${expanded ? "compress" : "expand"}.svg`}
+              alt=""
+              className="w-6 h-6"
+            />
+          </button>
         </div>
 
         {/* Context Switcher */}
-        <div className="px-[13px] mb-2">
-          <div className="flex items-center gap-4 bg-[#FCFCFC] border border-[#C7CFCE] rounded-lg px-[11px] py-3">
-            <img src="/nav-patterns/pattern-a/vector-pin.svg" alt="" className="w-[19px] h-[25px] flex-shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="font-bold text-[16px] text-[#434F59] leading-normal">Community Switcher</p>
-              <p className="font-normal text-[14px] text-[#5D6A71] leading-normal">Denver, CO</p>
+        {expanded ? (
+          <div className="px-[13px] mb-2">
+            <div className="flex items-center gap-4 bg-[#FCFCFC] border border-[#C7CFCE] rounded-lg px-[11px] py-3">
+              <img src="/nav-patterns/pattern-a/vector-pin.svg" alt="" className="w-[19px] h-[25px] flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-[16px] text-[#434F59] leading-normal whitespace-nowrap">
+                  Community Switcher
+                </p>
+                <p className="font-normal text-[14px] text-[#5D6A71] leading-normal whitespace-nowrap">Denver, CO</p>
+              </div>
+              <img src="/nav-patterns/pattern-a/sort.svg" alt="" className="w-4 h-4 flex-shrink-0" />
             </div>
-            <img src="/nav-patterns/pattern-a/sort.svg" alt="" className="w-4 h-4 flex-shrink-0" />
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="flex items-center justify-center h-12">
+              <img src="/nav-patterns/pattern-a/vector-pin.svg" alt="" className="w-[19px] h-[25px]" />
+            </div>
+            <div className="h-px w-full bg-[#E9ECEE] mb-2" />
+          </>
+        )}
 
         {/* Menu */}
         <nav className="flex flex-col gap-4 mt-4">
           {primaryMenuItems.map((item) => (
-            <div key={item.label} className="flex items-center gap-4 px-6 py-3">
-              <img src={item.icon} alt="" className="w-6 h-6" />
-              <span className="flex-1 font-semibold text-[16px] text-[#434F59]">{item.label}</span>
+            <div
+              key={item.label}
+              className={`flex items-center ${expanded ? "gap-4 px-6 py-3" : "justify-center px-4 py-3"}`}
+            >
+              <img src={item.icon} alt="" className="w-6 h-6 flex-shrink-0" />
+              {expanded && (
+                <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">
+                  {item.label}
+                </span>
+              )}
             </div>
           ))}
 
           {/* Property Tools group */}
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-[19px] w-full">
-              <div className="w-[5px] h-8 flex-shrink-0" />
-              <div className="flex flex-1 items-center gap-4 pr-6 py-3 min-w-0">
+            <div
+              className={`flex items-center w-full ${expanded ? "gap-[19px]" : ""} ${
+                !expanded && propertyToolsGroupActive ? "bg-[#F7FAFE]" : ""
+              }`}
+            >
+              <img
+                src={`/nav-patterns/pattern-a/indicator-${
+                  !expanded && propertyToolsGroupActive ? "active" : "inactive"
+                }.svg`}
+                alt=""
+                className={`w-[5px] h-8 flex-shrink-0 ${expanded ? "" : "invisible"}`}
+              />
+              <div
+                className={`flex flex-1 items-center min-w-0 ${
+                  expanded ? "gap-4 pr-6 py-3" : "justify-center px-4 py-3"
+                }`}
+              >
                 <img src="/nav-patterns/pattern-a/property-tools.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-                <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">Property Tools</span>
-                <img src="/nav-patterns/pattern-a/chevron-up.svg" alt="" className="w-6 h-6 flex-shrink-0" />
+                {expanded && (
+                  <>
+                    <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">
+                      Property Tools
+                    </span>
+                    <img src="/nav-patterns/pattern-a/chevron-up.svg" alt="" className="w-6 h-6 flex-shrink-0" />
+                  </>
+                )}
               </div>
             </div>
 
-            {propertyToolsItems.map((item) => (
-              <div
-                key={item.label}
-                className={`flex items-center gap-[19px] w-full ${item.active ? "bg-[#F7FAFE]" : ""}`}
-              >
-                <img
-                  src={`/nav-patterns/pattern-a/indicator-${item.active ? "active" : "inactive"}.svg`}
-                  alt=""
-                  className="w-[5px] h-8 flex-shrink-0"
-                />
-                <div className="flex items-center gap-4 pr-6 py-3 flex-1 min-w-0">
-                  <span className="w-6 h-6 flex-shrink-0" />
-                  <span
-                    className={`flex-1 font-semibold text-[16px] ${
-                      item.active ? "text-[#004C95]" : "text-[#434F59]"
-                    }`}
-                  >
-                    {item.label}
-                  </span>
+            {expanded &&
+              propertyToolsItems.map((item) => (
+                <div
+                  key={item.label}
+                  className={`flex items-center gap-[19px] w-full ${item.active ? "bg-[#F7FAFE]" : ""}`}
+                >
+                  <img
+                    src={`/nav-patterns/pattern-a/indicator-${item.active ? "active" : "inactive"}.svg`}
+                    alt=""
+                    className="w-[5px] h-8 flex-shrink-0"
+                  />
+                  <div className="flex items-center gap-4 pr-6 py-3 flex-1 min-w-0">
+                    <span className="w-6 h-6 flex-shrink-0" />
+                    <span
+                      className={`flex-1 font-semibold text-[16px] whitespace-nowrap ${
+                        item.active ? "text-[#004C95]" : "text-[#434F59]"
+                      }`}
+                    >
+                      {item.label}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
 
           {/* Financials group */}
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-[19px] w-full">
-              <div className="w-[5px] h-8 flex-shrink-0" />
-              <div className="flex flex-1 items-center gap-4 pr-6 py-3 min-w-0">
+            <div className={`flex items-center w-full ${expanded ? "gap-[19px]" : ""}`}>
+              <div className={`w-[5px] h-8 flex-shrink-0 ${expanded ? "" : "hidden"}`} />
+              <div
+                className={`flex flex-1 items-center min-w-0 ${
+                  expanded ? "gap-4 pr-6 py-3" : "justify-center px-4 py-3"
+                }`}
+              >
                 <img src="/nav-patterns/pattern-a/financials.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-                <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">Financials</span>
-                <img src="/nav-patterns/pattern-a/chevron-up.svg" alt="" className="w-6 h-6 flex-shrink-0" />
+                {expanded && (
+                  <>
+                    <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">
+                      Financials
+                    </span>
+                    <img src="/nav-patterns/pattern-a/chevron-up.svg" alt="" className="w-6 h-6 flex-shrink-0" />
+                  </>
+                )}
               </div>
             </div>
 
-            {financialsItems.map((label) => (
-              <div key={label} className="flex items-center gap-4 px-6 py-3 w-full">
-                <span className="w-6 h-6 flex-shrink-0" />
-                <span className="flex-1 font-semibold text-[16px] text-[#434F59]">{label}</span>
-              </div>
-            ))}
+            {expanded &&
+              financialsItems.map((label) => (
+                <div key={label} className="flex items-center gap-4 px-6 py-3 w-full">
+                  <span className="w-6 h-6 flex-shrink-0" />
+                  <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">{label}</span>
+                </div>
+              ))}
           </div>
 
-          {/* Enforcement (collapsed) */}
-          <div className="flex items-center gap-[19px] w-full">
-            <div className="w-[5px] h-8 flex-shrink-0" />
-            <div className="flex flex-1 items-center gap-4 pr-6 py-3 min-w-0">
+          {/* Enforcement (collapsed group) */}
+          <div className={`flex items-center w-full ${expanded ? "gap-[19px]" : ""}`}>
+            <div className={`w-[5px] h-8 flex-shrink-0 ${expanded ? "" : "hidden"}`} />
+            <div
+              className={`flex flex-1 items-center min-w-0 ${
+                expanded ? "gap-4 pr-6 py-3" : "justify-center px-4 py-3"
+              }`}
+            >
               <img src="/nav-patterns/pattern-a/enforcement.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-              <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">Enforcement</span>
-              <img src="/nav-patterns/pattern-a/chevron-up.svg" alt="" className="w-6 h-6 flex-shrink-0 scale-y-[-1]" />
+              {expanded && (
+                <>
+                  <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">
+                    Enforcement
+                  </span>
+                  <img
+                    src="/nav-patterns/pattern-a/chevron-up.svg"
+                    alt=""
+                    className="w-6 h-6 flex-shrink-0 scale-y-[-1]"
+                  />
+                </>
+              )}
             </div>
           </div>
         </nav>
