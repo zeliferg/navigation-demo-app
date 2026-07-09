@@ -1,5 +1,5 @@
 import PatternANav from "@/components/navs/pattern-a/PatternANav";
-import PatternB from "@/components/navs/pattern-b/PatternB";
+import PatternBNav from "@/components/navs/pattern-b/PatternBNav";
 import PatternC from "@/components/navs/pattern-c/PatternC";
 import PatternD from "@/components/navs/pattern-d/PatternD";
 
@@ -21,7 +21,7 @@ export const navPatterns: NavPattern[] = [
     id: "b",
     label: "Style B",
     descriptor: "Left sidebar with grouped categories, for dense technical monitoring.",
-    component: PatternB,
+    component: PatternBNav,
   },
   {
     id: "c",
