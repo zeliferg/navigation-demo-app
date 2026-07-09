@@ -35,7 +35,14 @@ export default function Home() {
         onPatternsChange={setSelectedPatterns}
       />
       <main className="flex-1 overflow-y-auto bg-white pb-40">
-        <div className="mx-auto max-w-7xl px-6 py-12 md:px-16 md:py-16">
+        <div
+          className="mx-auto py-12 md:py-16"
+          style={{
+            paddingLeft: "clamp(1rem, 5%, 2.5rem)", // 16-40px responsive
+            paddingRight: "clamp(1rem, 5%, 2.5rem)", // 16-40px responsive
+            maxWidth: "1440px",
+          }}
+        >
           {renderContent()}
         </div>
       </main>
