@@ -45,13 +45,15 @@ function NavRow({
       className={`flex items-center gap-2 px-4 py-2 rounded-lg w-full ${active ? "bg-[#E3EBF8]" : ""}`}
     >
       <img src={icon} alt="" className="w-6 h-6 flex-shrink-0" />
-      <span
-        className={`flex-1 text-[16px] leading-[1.5] tracking-[0.15px] min-w-0 truncate ${
-          active ? "text-[#003D78]" : "text-[#3C3D42]"
-        }`}
-      >
-        {label}
-      </span>
+      <div className="flex-1 min-w-0 py-1">
+        <span
+          className={`block text-[16px] leading-[1.5] tracking-[0.15px] truncate ${
+            active ? "text-[#003D78]" : "text-[#3C3D42]"
+          }`}
+        >
+          {label}
+        </span>
+      </div>
       {expandable && (
         <img
           src="/nav-patterns/pattern-b/expand-chevron.svg"
@@ -69,14 +71,14 @@ export default function PatternBNav({ children }: PatternBNavProps) {
       {/* Sidebar */}
       <aside className="relative w-[296px] flex-shrink-0 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] flex flex-col overflow-y-auto">
         {/* Logo */}
-        <div className="flex items-center justify-between pl-4 pr-[5px] pt-[11px] pb-2">
+        <div className="flex items-center justify-between pl-4 pr-[5px] pt-[11px] pb-[27px] h-[34px] box-content">
           <span className="font-medium text-[16px] tracking-[0.17px] text-[#003D78]">Placeholder Logo</span>
           <img src="/nav-patterns/pattern-b/stat-minus-2.svg" alt="" className="w-6 h-6 rotate-90" />
         </div>
 
         {/* Nav list */}
-        <nav className="flex flex-col px-2 pb-2 gap-0.5">
-          <div className="flex flex-col gap-0.5 pb-2">
+        <nav className="flex flex-col px-2 pb-2">
+          <div className="flex flex-col pb-2">
             {topItems.map((item) => (
               <NavRow key={item.label} icon={item.icon} label={item.label} active={item.active} />
             ))}
