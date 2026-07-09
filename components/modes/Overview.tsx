@@ -11,16 +11,11 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
 
   return (
     <div className="w-full">
-      <h1 className="text-3xl font-bold text-slate-900 mb-12">Navigation Patterns</h1>
-
-      {/* Single responsive grid: 2 cols (mobile) → 8 cols (tablet) → 12 cols (desktop) */}
+      {/* 2x2 grid: 1 column (mobile) → 2 columns (desktop) */}
       <div
-        className="w-full"
+        className="w-full grid grid-cols-1 md:grid-cols-2"
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
           gap: "clamp(1rem, 2%, 1.5rem)",
-          width: "100%",
         }}
       >
         {navPatterns.map((pattern) => {
