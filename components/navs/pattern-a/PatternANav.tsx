@@ -61,6 +61,17 @@ const notifications = [
 
 type DropdownKey = "language" | "help" | "notifications" | "account";
 
+// Anonymized placeholders — pulled data had real-looking property names/addresses.
+const properties = [
+  { id: "property-1", name: "Property 1", city: "Denver, CO" },
+  { id: "property-2", name: "Property 2", city: "Westminster, CO" },
+  { id: "property-3", name: "Property 3", city: "Boulder, CO" },
+  { id: "property-4", name: "Property 4", city: "San Diego, CA" },
+  { id: "property-5", name: "Property 5", city: "Houston, TX" },
+  { id: "property-6", name: "Property 6", city: "Orlando, FL" },
+  { id: "property-7", name: "Property 7", city: "Orlando, FL" },
+];
+
 // State values read directly from the Figma "Nav item states" node (47:5163):
 // Inactive: no bg, text #434F59. Hover: bg #ECF5FF, text unchanged.
 // Active (level 1 & 2): bg #F7FAFE, text #004C95, 5px bar (self-stretch), bar color #1A7BD9.
@@ -163,6 +174,33 @@ export default function PatternANav({ children }: PatternANavProps) {
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const topBarIconsRef = useRef<HTMLDivElement>(null);
 
+  const [switcherOpen, setSwitcherOpen] = useState(false);
+  const [switcherSearch, setSwitcherSearch] = useState("");
+  const [selectedPropertyIds, setSelectedPropertyIds] = useState<string[]>(["property-1"]);
+  const switcherRef = useRef<HTMLDivElement>(null);
+
+  const filteredProperties = properties.filter((p) => {
+    const q = switcherSearch.trim().toLowerCase();
+    if (!q) return true;
+    return p.name.toLowerCase().includes(q) || p.city.toLowerCase().includes(q);
+  });
+  const allFilteredSelected =
+    filteredProperties.length > 0 && filteredProperties.every((p) => selectedPropertyIds.includes(p.id));
+  const selectedProperties = properties.filter((p) => selectedPropertyIds.includes(p.id));
+
+  const togglePropertySelection = (id: string) => {
+    setSelectedPropertyIds((prev) => (prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]));
+  };
+
+  const toggleSelectAll = () => {
+    if (allFilteredSelected) {
+      const filteredIds = new Set(filteredProperties.map((p) => p.id));
+      setSelectedPropertyIds((prev) => prev.filter((id) => !filteredIds.has(id)));
+    } else {
+      setSelectedPropertyIds((prev) => Array.from(new Set([...prev, ...filteredProperties.map((p) => p.id)])));
+    }
+  };
+
   const propertyToolsHasActiveChild = propertyToolsItems.some((item) => item.id === activeId);
   const financialsHasActiveChild = financialsItems.some((item) => item.id === activeId);
 
@@ -183,13 +221,26 @@ export default function PatternANav({ children }: PatternANavProps) {
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [openDropdown]);
 
+  useEffect(() => {
+    if (!switcherOpen) return;
+
+    const handlePointerDown = (event: MouseEvent) => {
+      if (switcherRef.current && !switcherRef.current.contains(event.target as Node)) {
+        setSwitcherOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, [switcherOpen]);
+
   return (
     <div className={`${mulish.className} flex h-screen w-full bg-[#F8FAFB] border border-[#E9ECEE]`}>
       {/* Sidebar */}
       <aside
         className={`${
           expanded ? "w-[296px]" : "w-[56px]"
-        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white border-r border-[#E9ECEE] shadow-[0px_0px_20px_0px_rgba(94,98,120,0.04)] flex flex-col py-[14px] overflow-x-hidden overflow-y-auto`}
+        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white border-r border-[#E9ECEE] shadow-[0px_0px_20px_0px_rgba(94,98,120,0.04)] flex flex-col py-[14px] overflow-visible`}
       >
         {/* Logo */}
         <div className={`flex items-center h-14 ${expanded ? "justify-between px-6" : "justify-center px-4"}`}>
@@ -213,31 +264,144 @@ export default function PatternANav({ children }: PatternANavProps) {
           </button>
         </div>
 
-        {/* Context Switcher */}
-        {expanded ? (
-          <div className="px-[13px] mb-2">
-            <div className="flex items-center gap-4 bg-[#FCFCFC] border border-[#C7CFCE] rounded-lg px-[11px] py-3">
-              <img src="/nav-patterns/pattern-a/vector-pin.svg" alt="" className="w-[19px] h-[25px] flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="font-bold text-[16px] text-[#434F59] leading-normal whitespace-nowrap">
-                  Community Switcher
-                </p>
-                <p className="font-normal text-[14px] text-[#5D6A71] leading-normal whitespace-nowrap">Denver, CO</p>
+        {/* Context Switcher / Property Switcher trigger */}
+        <div ref={switcherRef} className="relative">
+          {expanded ? (
+            <div className="px-[13px] mb-2">
+              <button
+                type="button"
+                onClick={() => setSwitcherOpen((prev) => !prev)}
+                className="flex items-center gap-4 bg-[#FCFCFC] border border-[#C7CFCE] rounded-lg px-[11px] py-3 w-full text-left"
+              >
+                <img src="/nav-patterns/pattern-a/vector-pin.svg" alt="" className="w-[19px] h-[25px] flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  {selectedProperties.length <= 1 ? (
+                    <>
+                      <p className="font-bold text-[16px] text-[#434F59] leading-normal truncate">
+                        {selectedProperties[0]?.name ?? "Community Switcher"}
+                      </p>
+                      <p className="font-normal text-[14px] text-[#5D6A71] leading-normal truncate">
+                        {selectedProperties[0]?.city ?? "Select a community"}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-[16px] text-[#434F59] leading-normal truncate">
+                        <span className="font-bold">{selectedProperties.length}</span>{" "}
+                        <span className="font-normal">Communities Selected</span>
+                      </p>
+                      <p className="font-normal text-[14px] text-[#5D6A71] leading-normal truncate">
+                        {selectedProperties.map((p) => p.name).join(", ")}
+                      </p>
+                    </>
+                  )}
+                </div>
+                <img src="/nav-patterns/pattern-a/sort.svg" alt="" className="w-4 h-4 flex-shrink-0" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() => setSwitcherOpen((prev) => !prev)}
+                className="flex items-center justify-center h-12 w-full"
+                aria-label="Switch community"
+              >
+                <img src="/nav-patterns/pattern-a/vector-pin.svg" alt="" className="w-[19px] h-[25px]" />
+              </button>
+              <div className="h-px w-full bg-[#E9ECEE] mb-2" />
+            </>
+          )}
+
+          {switcherOpen && (
+            <div
+              className={`absolute ${
+                expanded ? "left-[13px] right-[13px]" : "left-2 w-[404px]"
+              } top-full mt-1 z-50 bg-white border border-[#E9ECEE] rounded-lg shadow-[0px_3px_10px_0px_rgba(0,0,0,0.1)] p-4 flex flex-col gap-4`}
+            >
+              {/* Search */}
+              <div className="flex items-center justify-between gap-2 border border-[#1A7BD9] rounded-lg px-[14px] py-[7px]">
+                <input
+                  type="text"
+                  value={switcherSearch}
+                  onChange={(e) => setSwitcherSearch(e.target.value)}
+                  placeholder="Search Name or City"
+                  className="flex-1 min-w-0 text-[14px] text-[#202227] placeholder:text-[#202227] outline-none"
+                />
+                <img src="/nav-patterns/pattern-a/search.svg" alt="" className="w-6 h-6 flex-shrink-0" />
               </div>
-              <img src="/nav-patterns/pattern-a/sort.svg" alt="" className="w-4 h-4 flex-shrink-0" />
+
+              {/* Select State (static, non-functional per scope) */}
+              <div className="flex items-center justify-between gap-2 border border-[#C7CFCE] rounded-lg px-[14px] py-[7px] -mt-2">
+                <span className="text-[14px] text-[#202227]">Select State</span>
+                <img src="/nav-patterns/pattern-a/chevron-down.svg" alt="" className="w-6 h-6 flex-shrink-0" />
+              </div>
+
+              {/* Select All */}
+              <button type="button" onClick={toggleSelectAll} className="flex items-center gap-3">
+                <span
+                  className={`w-5 h-5 rounded-[6px] border flex items-center justify-center flex-shrink-0 ${
+                    allFilteredSelected ? "bg-[#1A7BD9] border-[#1A7BD9]" : "border-[#C7CFCE]"
+                  }`}
+                >
+                  {allFilteredSelected && (
+                    <img src="/nav-patterns/pattern-a/check.svg" alt="" className="w-3 h-3" />
+                  )}
+                </span>
+                <span className="text-[14px] text-[#202227]">Select All ({filteredProperties.length})</span>
+              </button>
+
+              <div className="h-px w-full bg-[#E9ECEE]" />
+
+              {/* Property list */}
+              <div className="flex flex-col gap-2 max-h-[280px] overflow-y-auto">
+                {filteredProperties.map((property) => {
+                  const isSelected = selectedPropertyIds.includes(property.id);
+                  return (
+                    <button
+                      key={property.id}
+                      type="button"
+                      onClick={() => togglePropertySelection(property.id)}
+                      className={`flex items-start gap-3 p-4 rounded-lg border text-left ${TRANSITION} ${
+                        isSelected ? "bg-[#ECF5FF] border-[#1A7BD9]" : "border-[#C7CFCE]"
+                      }`}
+                    >
+                      <span
+                        className={`w-5 h-5 rounded-[6px] border flex items-center justify-center flex-shrink-0 ${
+                          isSelected ? "bg-[#1A7BD9] border-[#1A7BD9]" : "border-[#C7CFCE]"
+                        }`}
+                      >
+                        {isSelected && <img src="/nav-patterns/pattern-a/check.svg" alt="" className="w-3 h-3" />}
+                      </span>
+                      <div className="flex flex-col gap-1 min-w-0">
+                        <span className="text-[14px] text-[#202227] truncate">{property.name}</span>
+                        <span className="text-[12px] text-[#202227] truncate">{property.city}</span>
+                      </div>
+                    </button>
+                  );
+                })}
+                {filteredProperties.length === 0 && (
+                  <p className="text-[14px] text-[#5D6A71] py-2">No communities match your search.</p>
+                )}
+              </div>
+
+              {/* Choose Community */}
+              <button
+                type="button"
+                disabled={selectedPropertyIds.length === 0}
+                onClick={() => setSwitcherOpen(false)}
+                className={`w-full rounded-lg py-3 text-[16px] font-bold text-white tracking-[0.16px] ${TRANSITION} ${
+                  selectedPropertyIds.length === 0 ? "bg-[#ACB8B8] cursor-not-allowed" : "bg-[#1A7BD9]"
+                }`}
+              >
+                Choose Community
+              </button>
             </div>
-          </div>
-        ) : (
-          <>
-            <div className="flex items-center justify-center h-12">
-              <img src="/nav-patterns/pattern-a/vector-pin.svg" alt="" className="w-[19px] h-[25px]" />
-            </div>
-            <div className="h-px w-full bg-[#E9ECEE] mb-2" />
-          </>
-        )}
+          )}
+        </div>
 
         {/* Menu */}
-        <nav className="flex flex-col gap-4 mt-4">
+        <nav className="flex flex-col gap-4 mt-4 flex-1 overflow-y-auto overflow-x-visible">
           {primaryMenuItems.map((item) => (
             <NavRow
               key={item.id}
