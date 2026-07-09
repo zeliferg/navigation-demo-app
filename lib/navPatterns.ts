@@ -1,4 +1,4 @@
-import PatternA from "@/components/navs/pattern-a/PatternA";
+import PatternANav from "@/components/navs/pattern-a/PatternANav";
 import PatternB from "@/components/navs/pattern-b/PatternB";
 import PatternC from "@/components/navs/pattern-c/PatternC";
 import PatternD from "@/components/navs/pattern-d/PatternD";
@@ -7,7 +7,7 @@ export interface NavPattern {
   id: "a" | "b" | "c" | "d";
   label: string;
   descriptor: string;
-  component: React.ComponentType;
+  component: React.ComponentType<{ children?: React.ReactNode }>;
 }
 
 export const navPatterns: NavPattern[] = [
@@ -15,7 +15,7 @@ export const navPatterns: NavPattern[] = [
     id: "a",
     label: "Style A",
     descriptor: "Left sidebar with a context switcher, for managing multiple accounts.",
-    component: PatternA,
+    component: PatternANav,
   },
   {
     id: "b",

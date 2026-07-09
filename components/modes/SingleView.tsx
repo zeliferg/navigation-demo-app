@@ -19,15 +19,8 @@ export default function SingleView({ selectedPattern }: SingleViewProps) {
   const Component = pattern.component;
 
   return (
-    <div className="flex flex-col gap-8 lg:flex-row h-screen">
-      <div className="w-full lg:w-64 flex-shrink-0 overflow-y-auto">
-        <Component />
-      </div>
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-4">
-          <GridBody />
-        </div>
-      </div>
-    </div>
+    <Component>
+      <GridBody />
+    </Component>
   );
 }
