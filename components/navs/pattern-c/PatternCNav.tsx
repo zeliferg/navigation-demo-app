@@ -10,6 +10,7 @@ interface NavChild {
   id: string;
   label: string;
   icon: string;
+  disabled?: boolean;
 }
 
 interface NavItem {
@@ -49,22 +50,27 @@ const helpItem: NavItem = {
     { id: "knowledge-base", label: "Knowledge Base", icon: `${ICON}/knowledge-base.svg` },
     { id: "data-dictionary", label: "Data Dictionary", icon: `${ICON}/data-dictionary.svg` },
     { id: "release-notes", label: "Release Notes", icon: `${ICON}/releases.svg` },
-    { id: "support-request", label: "Support request", icon: `${ICON}/support.svg` },
+    // demo: shows the disabled secondary state (visible when Help is expanded)
+    { id: "support-request", label: "Support request", icon: `${ICON}/support.svg`, disabled: true },
   ],
 };
 
 // Collapsed-drawer slim rail order (icon-only): main items + Help, then Account/Logout at bottom.
 const slimItems: NavItem[] = [...mainItems, helpItem];
 
-// Active-state values from Figma node 64:9248:
-// Primary selected: bg rgba(40,84,138,0.24), text #001022. Secondary selected: bg
-// rgba(42,73,112,0.1), text #001022. Inactive text: rgba(0,16,34,0.67). Text is always
-// Circular Std Medium; only bg + text color change between states.
-const ACTIVE_PRIMARY_BG = "bg-[rgba(40,84,138,0.24)]";
-const ACTIVE_SECONDARY_BG = "bg-[rgba(42,73,112,0.1)]";
+// Interactive-state values from the Figma "Nav item states" sheet (node 64:10831).
+// Primary and secondary share the same bg per state:
+//   Active/rest: no bg, text rgba(0,16,34,0.67)
+//   Hover:       bg rgba(42,73,112,0.1); primary text stays muted, SECONDARY text darkens to #001022
+//   Selected:    bg rgba(40,84,138,0.24), text #001022 (same bg for both levels)
+//   Disabled:    no bg, text rgba(0,16,34,0.4), icon at 40% opacity, non-interactive
+// Text is always Circular Std Medium; only bg + text color change between states.
+const ACTIVE_PRIMARY_BG = "bg-[rgba(40,84,138,0.24)]"; // selected
+const ACTIVE_SECONDARY_BG = "bg-[rgba(40,84,138,0.24)]"; // selected (same as primary, per states sheet)
 const ACTIVE_TEXT = "text-[#001022]";
 const INACTIVE_TEXT = "text-[rgba(0,16,34,0.67)]";
-const HOVER_BG = "hover:bg-[rgba(42,73,112,0.06)]";
+const DISABLED_TEXT = "text-[rgba(0,16,34,0.4)]";
+const HOVER_BG = "hover:bg-[rgba(42,73,112,0.1)]";
 const TRANSITION = "transition-colors duration-150";
 
 function PrimaryRow({
@@ -73,33 +79,33 @@ function PrimaryRow({
   open,
   onClick,
   hasChildren = false,
+  disabled = false,
 }: {
   item: { icon?: string; label: string };
   active: boolean;
   open?: boolean;
   onClick: () => void;
   hasChildren?: boolean;
+  disabled?: boolean;
 }) {
+  const textColor = disabled ? DISABLED_TEXT : active ? ACTIVE_TEXT : INACTIVE_TEXT;
   return (
     <div className="px-2 py-0.5 w-full">
       <button
         type="button"
         onClick={onClick}
+        disabled={disabled}
         className={`flex items-center gap-2 px-2 py-1 rounded w-full text-left ${TRANSITION} ${
-          active ? ACTIVE_PRIMARY_BG : HOVER_BG
+          disabled ? "cursor-not-allowed" : active ? ACTIVE_PRIMARY_BG : HOVER_BG
         }`}
       >
         {item.icon ? (
-          <img src={item.icon} alt="" className="w-6 h-6 flex-shrink-0" />
+          <img src={item.icon} alt="" className={`w-6 h-6 flex-shrink-0 ${disabled ? "opacity-40" : ""}`} />
         ) : (
           <span className="w-6 h-6 flex-shrink-0" />
         )}
         <div className="flex-1 min-w-0 py-1">
-          <span
-            className={`block font-medium text-[18px] leading-[22px] tracking-[-0.43px] truncate ${
-              active ? ACTIVE_TEXT : INACTIVE_TEXT
-            }`}
-          >
+          <span className={`block font-medium text-[18px] leading-[22px] tracking-[-0.43px] truncate ${textColor}`}>
             {item.label}
           </span>
         </div>
@@ -115,21 +121,34 @@ function PrimaryRow({
   );
 }
 
-function SecondaryRow({ item, active, onClick }: { item: NavChild; active: boolean; onClick: () => void }) {
+function SecondaryRow({
+  item,
+  active,
+  onClick,
+  disabled = false,
+}: {
+  item: NavChild;
+  active: boolean;
+  onClick: () => void;
+  disabled?: boolean;
+}) {
+  const textColor = disabled ? DISABLED_TEXT : active ? ACTIVE_TEXT : INACTIVE_TEXT;
   return (
     <div className="px-2 py-0.5 w-full">
       <button
         type="button"
         onClick={onClick}
-        className={`flex items-center gap-2 pl-10 pr-2 py-0.5 rounded w-full text-left ${TRANSITION} ${
-          active ? ACTIVE_SECONDARY_BG : HOVER_BG
+        disabled={disabled}
+        className={`group flex items-center gap-2 pl-10 pr-2 py-0.5 rounded w-full text-left ${TRANSITION} ${
+          disabled ? "cursor-not-allowed" : active ? ACTIVE_SECONDARY_BG : HOVER_BG
         }`}
       >
-        <img src={item.icon} alt="" className="w-5 h-5 flex-shrink-0" />
+        <img src={item.icon} alt="" className={`w-5 h-5 flex-shrink-0 ${disabled ? "opacity-40" : ""}`} />
         <div className="flex-1 min-w-0 py-1">
+          {/* Secondary hover darkens the label to #001022 (primary hover does not) */}
           <span
-            className={`block font-medium text-[16px] leading-[22px] tracking-[-0.43px] truncate ${
-              active ? ACTIVE_TEXT : INACTIVE_TEXT
+            className={`block font-medium text-[16px] leading-[22px] tracking-[-0.43px] truncate ${textColor} ${
+              !disabled && !active ? "group-hover:text-[#001022]" : ""
             }`}
           >
             {item.label}
@@ -185,6 +204,7 @@ export default function PatternCNav({ children }: PatternCNavProps) {
               key={child.id}
               item={child}
               active={activeId === child.id}
+              disabled={child.disabled}
               onClick={() => setActiveId(child.id)}
             />
           ))}
@@ -223,6 +243,7 @@ export default function PatternCNav({ children }: PatternCNavProps) {
                 key={child.id}
                 item={child}
                 active={activeId === child.id}
+                disabled={child.disabled}
                 onClick={() => {
                   setActiveId(child.id);
                   setFlyoutId(null);
@@ -327,11 +348,13 @@ export default function PatternCNav({ children }: PatternCNavProps) {
 
             {/* Bottom menu - Settings/Logout, pinned to bottom */}
             <div className="flex-shrink-0 flex flex-col py-4">
-              {/* Settings has no icon asset in the pulled Figma data (empty placeholder in source) */}
+              {/* Settings has no icon asset in the pulled Figma data (empty placeholder in source).
+                  demo: marked disabled to show the disabled primary state. */}
               <PrimaryRow
                 item={{ label: "Settings" }}
-                active={activeId === "settings"}
-                onClick={() => setActiveId("settings")}
+                active={false}
+                disabled
+                onClick={() => {}}
               />
               <PrimaryRow
                 item={{ icon: `${ICON}/log-out.svg`, label: "Logout" }}
