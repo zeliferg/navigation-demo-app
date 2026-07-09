@@ -13,7 +13,7 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
     <div className="w-full">
       {/* 2x2 grid: 1 column (mobile) → 2 columns (desktop) */}
       <div
-        className="w-full grid grid-cols-1 md:grid-cols-2"
+        className="mx-auto grid grid-cols-1 md:grid-cols-2 mt-10"
         style={{
           gap: "clamp(1rem, 2%, 1.5rem)",
         }}
@@ -34,7 +34,7 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
               </div>
 
               {/* Card content */}
-              <div className="p-6">
+              <div className="pl-6 pr-6 pb-6">
                 <h2 className="text-xl font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
                   Pattern {pattern.label.split(" ")[1]}
                 </h2>
