@@ -472,7 +472,7 @@ export default function PatternANav({ children }: PatternANavProps) {
       {/* Main column */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar */}
-        <header className="h-14 bg-white shadow-[0px_1px_0px_0px_#E7EAE8] flex items-center justify-between pl-10 pr-6 flex-shrink-0">
+        <header className="h-14 bg-white shadow-[0px_1px_0px_0px_#E7EAE8] flex items-center justify-between px-6 flex-shrink-0">
           <div className="w-full max-w-[478px] min-w-0 border border-[#E9ECEE] rounded-lg bg-white px-4 py-3 flex items-center gap-3">
             <img src="/nav-patterns/pattern-a/search.svg" alt="" className="w-6 h-6 flex-shrink-0" />
             <span className="text-[14px] font-normal text-[#778588] truncate">
