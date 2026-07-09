@@ -292,20 +292,18 @@ function TopNavRow({
     <button
       type="button"
       onClick={onClick}
-      className={`flex items-center gap-2 px-4 py-2 rounded-lg w-full ${TRANSITION} ${
+      className={`flex items-center gap-2 px-4 h-12 rounded-lg w-full ${TRANSITION} ${
         active ? "bg-[#E3EBF8]" : HOVER_BG
       }`}
     >
       <img src={icon} alt="" className="w-6 h-6 flex-shrink-0" />
-      <div className="flex-1 min-w-0 py-1">
-        <span
-          className={`block text-[16px] leading-[1.5] tracking-[0.15px] truncate text-left ${
-            active ? "text-[#003D78]" : "text-[#3C3D42]"
-          }`}
-        >
-          {label}
-        </span>
-      </div>
+      <span
+        className={`flex-1 min-w-0 text-[16px] leading-[1.5] tracking-[0.15px] truncate text-left ${
+          active ? "text-[#003D78]" : "text-[#3C3D42]"
+        }`}
+      >
+        {label}
+      </span>
       {hasChildren && (
         <img
           src="/nav-patterns/pattern-b/expand-chevron.svg"
@@ -379,7 +377,7 @@ export default function PatternBNav({ children }: PatternBNavProps) {
       <aside
         className={`relative ${
           expanded ? "w-[296px]" : "w-[64px]"
-        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] flex flex-col overflow-y-auto overflow-x-hidden`}
+        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden`}
       >
         {/* Logo */}
         {expanded ? (
@@ -411,7 +409,7 @@ export default function PatternBNav({ children }: PatternBNavProps) {
         )}
 
         {/* Nav list */}
-        <nav className={`flex flex-col pb-2 ${expanded ? "px-2" : "px-1"}`}>
+        <nav className={`flex-1 overflow-y-auto flex flex-col pb-2 ${expanded ? "px-2" : "px-1"}`}>
           <div className="flex flex-col pb-2">
             {topItems.map((item) => (
               <TopNavRow
@@ -448,8 +446,8 @@ export default function PatternBNav({ children }: PatternBNavProps) {
           </div>
         </nav>
 
-        {/* Profile section - pinned to bottom */}
-        <div className={`mt-auto flex flex-col gap-2 pb-[10px] ${expanded ? "" : "items-center"}`}>
+        {/* Profile section - pinned to bottom, outside the scrolling nav so it stays visible */}
+        <div className={`flex-shrink-0 flex flex-col gap-2 pb-[10px] ${expanded ? "" : "items-center"}`}>
           <div className="h-px w-full bg-black/10" />
           {expanded ? (
             <div className="flex items-center gap-2 px-2 h-10">
