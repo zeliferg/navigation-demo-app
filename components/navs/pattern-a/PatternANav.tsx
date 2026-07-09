@@ -472,28 +472,31 @@ export default function PatternANav({ children }: PatternANavProps) {
       {/* Main column */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar */}
-        <header className="h-14 bg-white shadow-[0px_1px_0px_0px_#E7EAE8] flex items-center gap-6 pl-10 pr-6 flex-shrink-0">
-          <div className="flex-1 min-w-0 border border-[#E9ECEE] rounded-lg bg-white px-4 py-3 flex items-center gap-3">
+        <header className="h-14 bg-white shadow-[0px_1px_0px_0px_#E7EAE8] flex items-center pl-10 pr-6 flex-shrink-0">
+          <div className="w-full max-w-[478px] min-w-0 border border-[#E9ECEE] rounded-lg bg-white px-4 py-3 flex items-center gap-3">
             <img src="/nav-patterns/pattern-a/search.svg" alt="" className="w-6 h-6 flex-shrink-0" />
             <span className="text-[14px] font-normal text-[#778588] truncate">
               Search by Name, Plate, Year, Make, Model, or Color
             </span>
           </div>
-          <div ref={topBarIconsRef} className="flex items-center flex-shrink-0">
+          <div ref={topBarIconsRef} className="flex items-center flex-shrink-0 ml-auto">
             {/* Language selector */}
-            <div className="relative p-4">
+            <div className="relative">
               <button
                 type="button"
                 onClick={() => toggleDropdown("language")}
-                className={`flex items-center justify-center w-8 h-8 rounded-[6px] ${TRANSITION} ${
-                  openDropdown === "language" ? "bg-[#ECF5FF]" : ""
-                }`}
+                className="relative flex items-center justify-center w-14 h-14"
                 aria-label="Select language"
               >
+                <span
+                  className={`absolute inset-0 m-auto w-8 h-8 rounded-[6px] ${TRANSITION} ${
+                    openDropdown === "language" ? "bg-[#ECF5FF]" : ""
+                  }`}
+                />
                 <img
                   src={languages.find((l) => l.code === selectedLanguage)?.flag}
                   alt=""
-                  className="w-6 h-3 object-cover"
+                  className="relative z-10 w-6 h-3 object-cover"
                 />
               </button>
               {openDropdown === "language" && (
@@ -518,19 +521,22 @@ export default function PatternANav({ children }: PatternANavProps) {
             </div>
 
             {/* Help */}
-            <div className="relative p-4">
+            <div className="relative">
               <button
                 type="button"
                 onClick={() => toggleDropdown("help")}
-                className={`flex items-center justify-center w-8 h-8 rounded-[6px] ${TRANSITION} ${
-                  openDropdown === "help" ? "bg-[#1A7BD9]" : ""
-                }`}
+                className="relative flex items-center justify-center w-14 h-14"
                 aria-label="Help"
               >
+                <span
+                  className={`absolute inset-0 m-auto w-8 h-8 rounded-[6px] ${TRANSITION} ${
+                    openDropdown === "help" ? "bg-[#1A7BD9]" : ""
+                  }`}
+                />
                 <img
                   src={`/nav-patterns/pattern-a/${openDropdown === "help" ? "help-circle-white" : "help-circle"}.svg`}
                   alt=""
-                  className="w-6 h-6"
+                  className="relative z-10 w-6 h-6"
                 />
               </button>
               {openDropdown === "help" && (
@@ -556,21 +562,24 @@ export default function PatternANav({ children }: PatternANavProps) {
             </div>
 
             {/* Notifications */}
-            <div className="relative p-4">
+            <div className="relative">
               <button
                 type="button"
                 onClick={() => toggleDropdown("notifications")}
-                className={`flex items-center justify-center w-8 h-8 rounded-[6px] ${TRANSITION} ${
-                  openDropdown === "notifications" ? "bg-[#1A7BD9]" : ""
-                }`}
+                className="relative flex items-center justify-center w-14 h-14"
                 aria-label="Notifications"
               >
+                <span
+                  className={`absolute inset-0 m-auto w-8 h-8 rounded-[6px] ${TRANSITION} ${
+                    openDropdown === "notifications" ? "bg-[#1A7BD9]" : ""
+                  }`}
+                />
                 <img
                   src={`/nav-patterns/pattern-a/${
                     openDropdown === "notifications" ? "bell-badge-white" : "bell"
                   }.svg`}
                   alt=""
-                  className="w-6 h-6"
+                  className="relative z-10 w-6 h-6"
                 />
               </button>
               {openDropdown === "notifications" && (
@@ -614,19 +623,22 @@ export default function PatternANav({ children }: PatternANavProps) {
             </div>
 
             {/* Account */}
-            <div className="relative p-4">
+            <div className="relative">
               <button
                 type="button"
                 onClick={() => toggleDropdown("account")}
-                className={`flex items-center justify-center w-8 h-8 rounded-[6px] ${TRANSITION} ${
-                  openDropdown === "account" ? "bg-[#1A7BD9]" : ""
-                }`}
+                className="relative flex items-center justify-center w-14 h-14"
                 aria-label="Account menu"
               >
+                <span
+                  className={`absolute inset-0 m-auto w-8 h-8 rounded-[6px] ${TRANSITION} ${
+                    openDropdown === "account" ? "bg-[#1A7BD9]" : ""
+                  }`}
+                />
                 <img
                   src={`/nav-patterns/pattern-a/${openDropdown === "account" ? "user-white" : "user"}.svg`}
                   alt=""
-                  className="w-6 h-6"
+                  className="relative z-10 w-6 h-6"
                 />
               </button>
               {openDropdown === "account" && (
