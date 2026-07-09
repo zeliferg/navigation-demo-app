@@ -397,12 +397,12 @@ export default function PatternBNav({ children }: PatternBNavProps) {
             </button>
           </div>
         ) : (
-          <div className="flex flex-col items-center pt-[11px] pb-[27px] gap-3">
+          <div className="flex flex-col items-center pt-6">
             <button
               type="button"
               onClick={() => setExpanded(true)}
               aria-label="Expand sidebar"
-              className="flex-shrink-0"
+              className="flex items-center justify-center h-11 w-11"
             >
               <img src="/nav-patterns/pattern-b/stat-minus-2.svg" alt="" className="w-6 h-6 -rotate-90" />
             </button>
@@ -426,19 +426,23 @@ export default function PatternBNav({ children }: PatternBNavProps) {
           </div>
 
           <div className="flex flex-col pb-2">
-            {expanded && (
+            {expanded ? (
               <div className="px-4 py-1">
                 <span className="font-medium text-[16px] tracking-[0.15px] text-[#121826]">Services</span>
               </div>
+            ) : (
+              <div className="h-px w-full bg-black/10 mb-2" />
             )}
             {renderSection(servicesItems)}
           </div>
 
           <div className="flex flex-col">
-            {expanded && (
+            {expanded ? (
               <div className="px-4 py-1">
                 <span className="font-medium text-[16px] tracking-[0.15px] text-[#121826]">Utilities</span>
               </div>
+            ) : (
+              <div className="h-px w-full bg-black/10 mb-2" />
             )}
             {renderSection(utilitiesItems)}
           </div>
