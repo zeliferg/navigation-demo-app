@@ -94,13 +94,15 @@ function PrimaryRow({
         ) : (
           <span className="w-6 h-6 flex-shrink-0" />
         )}
-        <span
-          className={`flex-1 min-w-0 font-medium text-[18px] leading-[22px] tracking-[-0.43px] truncate ${
-            active ? ACTIVE_TEXT : INACTIVE_TEXT
-          }`}
-        >
-          {item.label}
-        </span>
+        <div className="flex-1 min-w-0 py-1">
+          <span
+            className={`block font-medium text-[18px] leading-[22px] tracking-[-0.43px] truncate ${
+              active ? ACTIVE_TEXT : INACTIVE_TEXT
+            }`}
+          >
+            {item.label}
+          </span>
+        </div>
         {hasChildren && (
           <img
             src={`${ICON}/carat-down.svg`}
@@ -124,13 +126,15 @@ function SecondaryRow({ item, active, onClick }: { item: NavChild; active: boole
         }`}
       >
         <img src={item.icon} alt="" className="w-5 h-5 flex-shrink-0" />
-        <span
-          className={`flex-1 min-w-0 font-medium text-[16px] leading-[22px] tracking-[-0.43px] truncate ${
-            active ? ACTIVE_TEXT : INACTIVE_TEXT
-          }`}
-        >
-          {item.label}
-        </span>
+        <div className="flex-1 min-w-0 py-1">
+          <span
+            className={`block font-medium text-[16px] leading-[22px] tracking-[-0.43px] truncate ${
+              active ? ACTIVE_TEXT : INACTIVE_TEXT
+            }`}
+          >
+            {item.label}
+          </span>
+        </div>
       </button>
     </div>
   );
