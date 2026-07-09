@@ -142,7 +142,7 @@ export default function SwitcherRail({
                   pointerEvents: isDisabled ? "none" : "auto",
                 }}
               >
-                {pattern.label}
+                {pattern.id.toUpperCase()}
               </div>
               <span
                 className="text-xs text-center leading-none"
