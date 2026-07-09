@@ -1,26 +1,15 @@
 export default function GridBody() {
-  const items = Array.from({ length: 6 }, (_, i) => ({
-    id: i + 1,
-    title: `Content Card ${i + 1}`,
-    description: "Placeholder content identical across all navigation patterns.",
-  }));
-
   return (
-    <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-3">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="rounded-lg border border-slate-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition-shadow"
-          >
-            <div className="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-              <div className="text-slate-400 text-sm font-medium">Image {item.id}</div>
-            </div>
-            <div className="p-4">
-              <h3 className="font-semibold text-slate-900">{item.title}</h3>
-              <p className="text-sm text-slate-600 mt-2">{item.description}</p>
-            </div>
-          </div>
-        ))}
+    <div className="flex flex-col gap-6 w-full">
+      <div className="flex flex-col gap-4">
+        <p className="text-[14px] text-[#1A7BD9]">
+          <span>Basic Information </span>
+          <span className="text-[#2A3440]">/ </span>
+          <span className="font-bold text-[#1A7BD9]">Property 1</span>
+        </p>
+        <h1 className="font-bold text-[32px] leading-[1.2] text-[#101828]">Property 1</h1>
+      </div>
+      <div className="bg-white border border-[#E9ECEE] rounded-lg h-[483px] w-full" />
     </div>
   );
 }

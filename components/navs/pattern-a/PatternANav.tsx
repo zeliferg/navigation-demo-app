@@ -108,17 +108,17 @@ function NavRow({
       } ${active ? "bg-[#F7FAFE]" : HOVER_BG}`}
     >
       {showBar && (
-        <div className={`w-[5px] self-stretch flex-shrink-0 ${active ? "bg-[#1A7BD9]" : ""}`} />
+        <div className={`w-[5px] flex-shrink-0 ${active ? "self-stretch bg-[#1A7BD9]" : "h-8"}`} />
       )}
       <div
-        className={`flex flex-1 items-center min-w-0 ${
-          expanded ? "gap-4 pr-6 py-3" : "justify-center px-4 py-3"
+        className={`flex flex-1 items-center h-12 min-w-0 ${
+          expanded ? "gap-4 pr-6" : "justify-center px-4"
         }`}
       >
         <img src={icon} alt="" className="w-6 h-6 flex-shrink-0" />
         {expanded && (
           <>
-            <span className={`flex-1 font-semibold text-[16px] whitespace-nowrap ${TRANSITION} ${active ? ACTIVE_TEXT : INACTIVE_TEXT}`}>
+            <span className={`flex-1 font-semibold text-[16px] leading-[1.2] whitespace-nowrap ${TRANSITION} ${active ? ACTIVE_TEXT : INACTIVE_TEXT}`}>
               {label}
             </span>
             {isGroup && (
@@ -150,10 +150,10 @@ function NavSubRow({ label, active, onClick }: { label: string; active: boolean;
         active ? "bg-[#F7FAFE]" : HOVER_BG
       }`}
     >
-      <div className={`w-[5px] self-stretch flex-shrink-0 ${active ? "bg-[#1A7BD9]" : ""}`} />
-      <div className="flex items-center gap-4 pr-6 py-3 flex-1 min-w-0">
+      <div className={`w-[5px] flex-shrink-0 ${active ? "self-stretch bg-[#1A7BD9]" : "h-8"}`} />
+      <div className="flex items-center gap-4 pr-6 h-12 flex-1 min-w-0">
         <span className="w-6 h-6 flex-shrink-0" />
-        <span className={`flex-1 font-semibold text-[16px] whitespace-nowrap ${TRANSITION} ${active ? ACTIVE_TEXT : INACTIVE_TEXT}`}>
+        <span className={`flex-1 font-semibold text-[16px] leading-[1.2] whitespace-nowrap ${TRANSITION} ${active ? ACTIVE_TEXT : INACTIVE_TEXT}`}>
           {label}
         </span>
       </div>
@@ -240,7 +240,7 @@ export default function PatternANav({ children }: PatternANavProps) {
       <aside
         className={`${
           expanded ? "w-[296px]" : "w-[56px]"
-        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white border-r border-[#E9ECEE] shadow-[0px_0px_20px_0px_rgba(94,98,120,0.04)] flex flex-col py-[14px] overflow-visible`}
+        } transition-[width] duration-200 ease-in-out flex-shrink-0 bg-white border-r border-[#E9ECEE] shadow-[0px_0px_20px_0px_rgba(94,98,120,0.04)] flex flex-col gap-6 py-[14px] overflow-visible`}
       >
         {/* Logo */}
         <div className={`flex items-center h-14 ${expanded ? "justify-between px-6" : "justify-center px-4"}`}>
@@ -267,11 +267,11 @@ export default function PatternANav({ children }: PatternANavProps) {
         {/* Context Switcher / Property Switcher trigger */}
         <div ref={switcherRef} className="relative">
           {expanded ? (
-            <div className="px-[13px] mb-2">
+            <div className="px-[13px]">
               <button
                 type="button"
                 onClick={() => setSwitcherOpen((prev) => !prev)}
-                className="flex items-center gap-4 bg-[#FCFCFC] border border-[#C7CFCE] rounded-lg px-[11px] py-3 w-full text-left"
+                className="flex items-center gap-4 bg-[#FCFCFC] border border-[#C7CFCE] rounded-lg px-[11px] h-[62px] w-full text-left"
               >
                 <img src="/nav-patterns/pattern-a/vector-pin.svg" alt="" className="w-[19px] h-[25px] flex-shrink-0" />
                 <div className="flex-1 min-w-0">
@@ -309,7 +309,7 @@ export default function PatternANav({ children }: PatternANavProps) {
               >
                 <img src="/nav-patterns/pattern-a/vector-pin.svg" alt="" className="w-[19px] h-[25px]" />
               </button>
-              <div className="h-px w-full bg-[#E9ECEE] mb-2" />
+              <div className="h-px w-full bg-[#E9ECEE]" />
             </>
           )}
 
@@ -401,7 +401,7 @@ export default function PatternANav({ children }: PatternANavProps) {
         </div>
 
         {/* Menu */}
-        <nav className="flex flex-col gap-4 mt-4 flex-1 overflow-y-auto overflow-x-visible">
+        <nav className="flex flex-col gap-4 flex-1 overflow-y-auto overflow-x-visible">
           {primaryMenuItems.map((item) => (
             <NavRow
               key={item.id}
