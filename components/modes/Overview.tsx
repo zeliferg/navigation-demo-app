@@ -13,11 +13,10 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
     <div
       className="grid grid-cols-1 md:grid-cols-2"
       style={{
-        marginTop: "40px",
-        marginLeft: "auto",
-        marginRight: "auto",
+        margin: "40px auto 0",
         gap: "clamp(1rem, 2%, 1.5rem)",
         maxWidth: "900px",
+        width: "100%",
       }}
     >
         {navPatterns.map((pattern) => {
