@@ -10,9 +10,9 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold text-slate-900 mb-12">Navigation Patterns</h1>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+    <div>
+      <h1 className="text-3xl font-bold text-slate-900 mb-8">Navigation Patterns</h1>
+      <div className="grid grid-cols-1 gap-4 md:gap-8 md:grid-cols-2">
         {navPatterns.map((pattern) => {
           const Component = pattern.component;
           return (

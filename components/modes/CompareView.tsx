@@ -19,39 +19,31 @@ export default function CompareView({ selectedPatterns }: CompareViewProps) {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="border-b border-slate-200 bg-white">
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-slate-900">
-            Compare: Pattern {patterns.map((p) => p?.label).join(" vs ")}
-          </h1>
-        </div>
-      </div>
+    <div className="flex flex-col">
+      <h1 className="text-3xl font-bold text-slate-900 mb-8">
+        Compare: Pattern {patterns.map((p) => p?.label).join(" vs ")}
+      </h1>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {patterns.map((pattern) => {
           if (!pattern) return null;
           const Component = pattern.component;
 
           return (
-            <div
-              key={pattern.id}
-              className="flex-1 flex flex-col border-r border-slate-200 last:border-r-0 overflow-y-auto"
-            >
-              <div className="border-b border-slate-200 bg-slate-50 px-6 py-4 flex-shrink-0">
-                <h2 className="font-semibold text-slate-900">
+            <div key={pattern.id} className="flex flex-col">
+              <div className="mb-6">
+                <h2 className="font-semibold text-slate-900 text-lg">
                   Pattern {pattern.label}
                 </h2>
-                <p className="text-sm text-slate-600 mt-1">{pattern.descriptor}</p>
+                <p className="text-sm text-slate-600 mt-2">{pattern.descriptor}</p>
               </div>
 
-              <div className="flex-1 flex flex-col">
-                <div className="p-6 flex-shrink-0">
-                  <Component />
-                </div>
-                <div className="flex-1">
-                  <GridBody />
-                </div>
+              <div className="mb-8 flex-shrink-0">
+                <Component />
+              </div>
+
+              <div>
+                <GridBody />
               </div>
             </div>
           );

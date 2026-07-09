@@ -19,22 +19,16 @@ export default function SingleView({ selectedPattern }: SingleViewProps) {
   const Component = pattern.component;
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="border-b border-slate-200 bg-white">
-        <div className="p-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-slate-900">
-                Pattern {pattern.label}
-              </h1>
-              <p className="text-slate-600 mt-2">{pattern.descriptor}</p>
-            </div>
-          </div>
-        </div>
+    <div className="flex flex-col">
+      <div className="border-b border-slate-200 mb-8">
+        <h1 className="text-3xl font-bold text-slate-900">
+          Pattern {pattern.label}
+        </h1>
+        <p className="text-slate-600 mt-2">{pattern.descriptor}</p>
       </div>
 
-      <div className="flex flex-1 gap-6 p-6">
-        <div className="w-64 flex-shrink-0">
+      <div className="flex flex-col gap-8 lg:flex-row">
+        <div className="w-full lg:w-64 flex-shrink-0">
           <Component />
         </div>
         <div className="flex-1">

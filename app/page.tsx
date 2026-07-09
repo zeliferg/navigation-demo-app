@@ -35,7 +35,9 @@ export default function Home() {
         onPatternsChange={setSelectedPatterns}
       />
       <main className="flex-1 overflow-y-auto bg-white pb-40">
-        {renderContent()}
+        <div className="mx-auto max-w-7xl px-6 py-12 md:px-16 md:py-16">
+          {renderContent()}
+        </div>
       </main>
     </div>
   );
