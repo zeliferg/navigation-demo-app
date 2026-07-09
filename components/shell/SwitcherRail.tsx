@@ -39,16 +39,20 @@ export default function SwitcherRail({
   };
 
   const isPatternDisabled = (patternId: string) => {
-    if (currentMode === "overview" || (currentMode !== "single" && currentMode !== "compare")) {
+    if (currentMode === "overview") {
       return true;
     }
-    if (currentMode === "compare" && !selectedPatterns.includes(patternId)) {
+    if (currentMode === "single") {
+      return false;
+    }
+    if (currentMode === "compare") {
+      if (selectedPatterns.includes(patternId)) {
+        return false;
+      }
       return selectedPatterns.length >= 2;
     }
     return false;
   };
-
-  const showPatternGroup = currentMode === "single" || currentMode === "compare";
 
   return (
     <div
@@ -106,50 +110,48 @@ export default function SwitcherRail({
         }}
       />
 
-      {/* Pattern Group (only shown in Single/Compare modes) */}
-      {showPatternGroup && (
-        <div className="flex gap-4 items-center">
-          {navPatterns.map((pattern) => {
-            const isActive = selectedPatterns.includes(pattern.id);
-            const isDisabled = isPatternDisabled(pattern.id);
+      {/* Pattern Group (always shown) */}
+      <div className="flex gap-4 items-center">
+        {navPatterns.map((pattern) => {
+          const isActive = selectedPatterns.includes(pattern.id);
+          const isDisabled = isPatternDisabled(pattern.id);
 
-            return (
-              <button
-                key={pattern.id}
-                onClick={() => handlePatternToggle(pattern.id)}
-                disabled={isDisabled}
-                className="flex flex-col items-center gap-1 w-12 transition-opacity"
+          return (
+            <button
+              key={pattern.id}
+              onClick={() => handlePatternToggle(pattern.id)}
+              disabled={isDisabled}
+              className="flex flex-col items-center gap-1 w-12 transition-opacity"
+              style={{
+                opacity: isDisabled ? 0.4 : 1,
+                cursor: isDisabled ? "not-allowed" : "pointer",
+              }}
+            >
+              <div
+                className="w-12 h-12 flex items-center justify-center rounded-[12px] border-[0.5px] border-solid shadow-[0px_2px_6.8px_0px_rgba(0,0,0,0.1)] transition-colors font-semibold text-sm"
                 style={{
-                  opacity: isDisabled ? 0.4 : 1,
-                  cursor: isDisabled ? "not-allowed" : "pointer",
+                  backgroundColor: isActive ? "#212121" : "#FFFFFF",
+                  borderColor: isActive ? "white" : "#D1D1D1",
+                  color: isActive ? "white" : "#212121",
+                  pointerEvents: isDisabled ? "none" : "auto",
                 }}
               >
-                <div
-                  className="w-12 h-12 flex items-center justify-center rounded-[12px] border-[0.5px] border-solid shadow-[0px_2px_6.8px_0px_rgba(0,0,0,0.1)] transition-colors font-semibold text-sm"
-                  style={{
-                    backgroundColor: isActive ? "#212121" : "#FFFFFF",
-                    borderColor: isActive ? "white" : "#D1D1D1",
-                    color: isActive ? "white" : "#212121",
-                    pointerEvents: isDisabled ? "none" : "auto",
-                  }}
-                >
-                  {pattern.label}
-                </div>
-                <span
-                  className="text-xs text-center leading-none"
-                  style={{
-                    color: "#212121",
-                    fontWeight: isActive ? 500 : 400,
-                    fontFamily: "Roboto, sans-serif",
-                  }}
-                >
-                  {pattern.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      )}
+                {pattern.label}
+              </div>
+              <span
+                className="text-xs text-center leading-none"
+                style={{
+                  color: "#212121",
+                  fontWeight: isActive ? 500 : 400,
+                  fontFamily: "Roboto, sans-serif",
+                }}
+              >
+                {pattern.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
