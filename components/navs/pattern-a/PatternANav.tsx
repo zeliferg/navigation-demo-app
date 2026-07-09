@@ -13,25 +13,121 @@ interface PatternANavProps {
 }
 
 const primaryMenuItems = [
-  { label: "Dashboard", icon: "/nav-patterns/pattern-a/grid.svg" },
-  { label: "Search", icon: "/nav-patterns/pattern-a/search-nav.svg" },
+  { id: "dashboard", label: "Dashboard", icon: "/nav-patterns/pattern-a/grid.svg" },
+  { id: "search", label: "Search", icon: "/nav-patterns/pattern-a/search-nav.svg" },
 ];
 
 const propertyToolsItems = [
-  { label: "Basic Information", active: true },
-  { label: "Property Reports", active: false },
-  { label: "Materials", active: false },
-  { label: "Employee Vehicles", active: false },
-  { label: "Orders", active: false },
+  { id: "basic-information", label: "Basic Information" },
+  { id: "property-reports", label: "Property Reports" },
+  { id: "materials", label: "Materials" },
+  { id: "employee-vehicles", label: "Employee Vehicles" },
+  { id: "orders", label: "Orders" },
 ];
 
-const financialsItems = ["Month End Statements", "Revenue and Deduction", "Revenue Calculator"];
+const financialsItems = [
+  { id: "month-end-statements", label: "Month End Statements" },
+  { id: "revenue-deduction", label: "Revenue and Deduction" },
+  { id: "revenue-calculator", label: "Revenue Calculator" },
+];
 
-// Property Tools is highlighted collapsed too since its child "Basic Information" is active.
-const propertyToolsGroupActive = propertyToolsItems.some((item) => item.active);
+const DEFAULT_ACTIVE_ID = "basic-information";
+
+// State values read directly from the Figma "Nav item states" node (47:5163):
+// Inactive: no bg, text #434F59. Hover: bg #ECF5FF, text unchanged.
+// Active (level 1 & 2): bg #F7FAFE, text #004C95, 5px bar (self-stretch), bar color #1A7BD9.
+// Icon graphic/color and font-weight (600) never change between states.
+const HOVER_BG = "hover:bg-[#ECF5FF]";
+const TRANSITION = "transition-colors duration-150";
+const ACTIVE_TEXT = "text-[#004C95]";
+const INACTIVE_TEXT = "text-[#434F59]";
+
+function NavRow({
+  icon,
+  label,
+  active,
+  expanded,
+  onClick,
+  isGroup = false,
+  isOpen = true,
+}: {
+  icon: string;
+  label: string;
+  active: boolean;
+  expanded: boolean;
+  onClick?: () => void;
+  isGroup?: boolean;
+  isOpen?: boolean;
+}) {
+  const showBar = expanded || active;
+
+  return (
+    <div
+      onClick={onClick}
+      className={`group flex items-center w-full ${TRANSITION} ${onClick ? "cursor-pointer" : ""} ${
+        showBar ? (expanded ? "gap-[19px]" : "gap-[11px]") : ""
+      } ${active ? "bg-[#F7FAFE]" : HOVER_BG}`}
+    >
+      {showBar && (
+        <div className={`w-[5px] self-stretch flex-shrink-0 ${active ? "bg-[#1A7BD9]" : ""}`} />
+      )}
+      <div
+        className={`flex flex-1 items-center min-w-0 ${
+          expanded ? "gap-4 pr-6 py-3" : "justify-center px-4 py-3"
+        }`}
+      >
+        <img src={icon} alt="" className="w-6 h-6 flex-shrink-0" />
+        {expanded && (
+          <>
+            <span className={`flex-1 font-semibold text-[16px] whitespace-nowrap ${TRANSITION} ${active ? ACTIVE_TEXT : INACTIVE_TEXT}`}>
+              {label}
+            </span>
+            {isGroup && (
+              <div className="relative w-6 h-6 flex-shrink-0">
+                <img
+                  src={`/nav-patterns/pattern-a/${isOpen ? "chevron-up" : "chevron-down"}.svg`}
+                  alt=""
+                  className="absolute inset-0 w-6 h-6 transition-opacity duration-150 group-hover:opacity-0"
+                />
+                <img
+                  src="/nav-patterns/pattern-a/chevron-down.svg"
+                  alt=""
+                  className="absolute inset-0 w-6 h-6 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+                />
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function NavSubRow({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+  return (
+    <div
+      onClick={onClick}
+      className={`flex items-center gap-[19px] w-full cursor-pointer ${TRANSITION} ${
+        active ? "bg-[#F7FAFE]" : HOVER_BG
+      }`}
+    >
+      <div className={`w-[5px] self-stretch flex-shrink-0 ${active ? "bg-[#1A7BD9]" : ""}`} />
+      <div className="flex items-center gap-4 pr-6 py-3 flex-1 min-w-0">
+        <span className="w-6 h-6 flex-shrink-0" />
+        <span className={`flex-1 font-semibold text-[16px] whitespace-nowrap ${TRANSITION} ${active ? ACTIVE_TEXT : INACTIVE_TEXT}`}>
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export default function PatternANav({ children }: PatternANavProps) {
   const [expanded, setExpanded] = useState(true);
+  const [activeId, setActiveId] = useState(DEFAULT_ACTIVE_ID);
+
+  const propertyToolsHasActiveChild = propertyToolsItems.some((item) => item.id === activeId);
+  const financialsHasActiveChild = financialsItems.some((item) => item.id === activeId);
 
   return (
     <div className={`${mulish.className} flex h-screen w-full bg-[#F8FAFB] border border-[#E9ECEE]`}>
@@ -89,128 +185,69 @@ export default function PatternANav({ children }: PatternANavProps) {
         {/* Menu */}
         <nav className="flex flex-col gap-4 mt-4">
           {primaryMenuItems.map((item) => (
-            <div
-              key={item.label}
-              className={`flex items-center ${expanded ? "gap-4 px-6 py-3" : "justify-center px-4 py-3"}`}
-            >
-              <img src={item.icon} alt="" className="w-6 h-6 flex-shrink-0" />
-              {expanded && (
-                <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">
-                  {item.label}
-                </span>
-              )}
-            </div>
+            <NavRow
+              key={item.id}
+              icon={item.icon}
+              label={item.label}
+              active={item.id === activeId}
+              expanded={expanded}
+              onClick={() => setActiveId(item.id)}
+            />
           ))}
 
           {/* Property Tools group */}
           <div className="flex flex-col gap-2">
-            <div
-              className={`flex items-center w-full ${expanded ? "gap-[19px]" : ""} ${
-                !expanded && propertyToolsGroupActive ? "bg-[#F7FAFE]" : ""
-              }`}
-            >
-              <img
-                src={`/nav-patterns/pattern-a/indicator-${
-                  !expanded && propertyToolsGroupActive ? "active" : "inactive"
-                }.svg`}
-                alt=""
-                className={`w-[5px] h-8 flex-shrink-0 ${expanded ? "" : "invisible"}`}
-              />
-              <div
-                className={`flex flex-1 items-center min-w-0 ${
-                  expanded ? "gap-4 pr-6 py-3" : "justify-center px-4 py-3"
-                }`}
-              >
-                <img src="/nav-patterns/pattern-a/property-tools.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-                {expanded && (
-                  <>
-                    <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">
-                      Property Tools
-                    </span>
-                    <img src="/nav-patterns/pattern-a/chevron-up.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-                  </>
-                )}
-              </div>
-            </div>
+            <NavRow
+              icon="/nav-patterns/pattern-a/property-tools.svg"
+              label="Property Tools"
+              active={!expanded && propertyToolsHasActiveChild}
+              expanded={expanded}
+              isGroup
+              isOpen
+            />
 
             {expanded &&
               propertyToolsItems.map((item) => (
-                <div
-                  key={item.label}
-                  className={`flex items-center gap-[19px] w-full ${item.active ? "bg-[#F7FAFE]" : ""}`}
-                >
-                  <img
-                    src={`/nav-patterns/pattern-a/indicator-${item.active ? "active" : "inactive"}.svg`}
-                    alt=""
-                    className="w-[5px] h-8 flex-shrink-0"
-                  />
-                  <div className="flex items-center gap-4 pr-6 py-3 flex-1 min-w-0">
-                    <span className="w-6 h-6 flex-shrink-0" />
-                    <span
-                      className={`flex-1 font-semibold text-[16px] whitespace-nowrap ${
-                        item.active ? "text-[#004C95]" : "text-[#434F59]"
-                      }`}
-                    >
-                      {item.label}
-                    </span>
-                  </div>
-                </div>
+                <NavSubRow
+                  key={item.id}
+                  label={item.label}
+                  active={item.id === activeId}
+                  onClick={() => setActiveId(item.id)}
+                />
               ))}
           </div>
 
           {/* Financials group */}
           <div className="flex flex-col gap-2">
-            <div className={`flex items-center w-full ${expanded ? "gap-[19px]" : ""}`}>
-              <div className={`w-[5px] h-8 flex-shrink-0 ${expanded ? "" : "hidden"}`} />
-              <div
-                className={`flex flex-1 items-center min-w-0 ${
-                  expanded ? "gap-4 pr-6 py-3" : "justify-center px-4 py-3"
-                }`}
-              >
-                <img src="/nav-patterns/pattern-a/financials.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-                {expanded && (
-                  <>
-                    <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">
-                      Financials
-                    </span>
-                    <img src="/nav-patterns/pattern-a/chevron-up.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-                  </>
-                )}
-              </div>
-            </div>
+            <NavRow
+              icon="/nav-patterns/pattern-a/financials.svg"
+              label="Financials"
+              active={!expanded && financialsHasActiveChild}
+              expanded={expanded}
+              isGroup
+              isOpen
+            />
 
             {expanded &&
-              financialsItems.map((label) => (
-                <div key={label} className="flex items-center gap-4 px-6 py-3 w-full">
-                  <span className="w-6 h-6 flex-shrink-0" />
-                  <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">{label}</span>
-                </div>
+              financialsItems.map((item) => (
+                <NavSubRow
+                  key={item.id}
+                  label={item.label}
+                  active={item.id === activeId}
+                  onClick={() => setActiveId(item.id)}
+                />
               ))}
           </div>
 
-          {/* Enforcement (collapsed group) */}
-          <div className={`flex items-center w-full ${expanded ? "gap-[19px]" : ""}`}>
-            <div className={`w-[5px] h-8 flex-shrink-0 ${expanded ? "" : "hidden"}`} />
-            <div
-              className={`flex flex-1 items-center min-w-0 ${
-                expanded ? "gap-4 pr-6 py-3" : "justify-center px-4 py-3"
-              }`}
-            >
-              <img src="/nav-patterns/pattern-a/enforcement.svg" alt="" className="w-6 h-6 flex-shrink-0" />
-              {expanded && (
-                <>
-                  <span className="flex-1 font-semibold text-[16px] text-[#434F59] whitespace-nowrap">
-                    Enforcement
-                  </span>
-                  <img
-                    src="/nav-patterns/pattern-a/chevron-up.svg"
-                    alt=""
-                    className="w-6 h-6 flex-shrink-0 scale-y-[-1]"
-                  />
-                </>
-              )}
-            </div>
-          </div>
+          {/* Enforcement (closed group, no children shown) */}
+          <NavRow
+            icon="/nav-patterns/pattern-a/enforcement.svg"
+            label="Enforcement"
+            active={false}
+            expanded={expanded}
+            isGroup
+            isOpen={false}
+          />
         </nav>
       </aside>
 

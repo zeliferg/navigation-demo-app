@@ -22,14 +22,21 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
         {navPatterns.map((pattern) => {
           const Component = pattern.component;
           return (
-            <button
+            <div
               key={pattern.id}
               onClick={() => handleCardClick(pattern.id)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  handleCardClick(pattern.id);
+                }
+              }}
               className="group rounded-lg border border-slate-200 bg-white shadow-sm overflow-hidden hover:shadow-md transition-shadow text-left cursor-pointer"
             >
               {/* Thumbnail container with pattern component */}
               <div className="bg-slate-50 border-b border-slate-200 p-4 h-48 overflow-hidden flex items-center justify-center">
-                <div className="scale-50 origin-center">
+                <div className="scale-50 origin-center pointer-events-none">
                   <Component />
                 </div>
               </div>
@@ -43,7 +50,7 @@ export default function Overview({ onSelectPattern }: OverviewProps) {
                   {pattern.descriptor}
                 </p>
               </div>
-            </button>
+            </div>
           );
         })}
     </div>
