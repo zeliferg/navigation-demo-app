@@ -29,14 +29,14 @@ export default function Home() {
   const isFullBleed = currentMode === "single";
 
   return (
-    <div className="flex h-screen bg-slate-100">
+    <div className="flex h-screen bg-slate-100 overflow-x-hidden">
       <SwitcherRail
         currentMode={currentMode}
         onModeChange={setCurrentMode}
         selectedPatterns={selectedPatterns}
         onPatternsChange={setSelectedPatterns}
       />
-      <main className="flex-1 overflow-y-auto bg-white pb-40">
+      <main className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden bg-white pb-40">
         {isFullBleed ? (
           renderContent()
         ) : (
