@@ -36,12 +36,12 @@ export default function PatternDNav({ children }: PatternDNavProps) {
         {/* Left: logo + tabs */}
         <div className="flex items-center min-w-0">
           <span className={`${mulish.className} text-[30px] leading-[0.95] text-white pr-4 flex-shrink-0`}>Logo</span>
-          <nav className="flex items-center h-[60px]">
+          <nav className="flex items-center">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
-                className={`flex items-center gap-1 h-full px-4 border-b-4 whitespace-nowrap ${
+                className={`flex items-center gap-1 p-4 border-b-4 whitespace-nowrap ${
                   tab.active ? "border-[#FCCB49]" : "border-transparent"
                 }`}
               >
@@ -59,7 +59,7 @@ export default function PatternDNav({ children }: PatternDNavProps) {
               key={item.id}
               type="button"
               aria-label={item.label}
-              className="flex items-center gap-1 h-[60px] px-4"
+              className="flex items-center gap-1 p-4"
             >
               <img src={`${DIR}/icon-circle.svg`} alt="" className="w-4 h-4" />
               <img src={`${DIR}/chevron-down.svg`} alt="" className="w-2.5 h-2.5" />
