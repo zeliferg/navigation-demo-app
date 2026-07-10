@@ -8,7 +8,8 @@ interface CompareViewProps {
 export default function CompareView({ selectedPatterns }: CompareViewProps) {
   const patterns = selectedPatterns
     .map((id) => navPatterns.find((p) => p.id === id))
-    .filter(Boolean);
+    .filter(Boolean)
+    .slice(0, 2);
 
   if (patterns.length === 0) {
     return (
@@ -18,37 +19,29 @@ export default function CompareView({ selectedPatterns }: CompareViewProps) {
     );
   }
 
+  // Full-bleed: the two shells split the available width evenly (flex-1 each), so with two
+  // patterns each occupies half the viewport (minus the switcher rail) at full height. Each
+  // pattern renders its own full app shell; GridBody is passed for patterns that use it.
   return (
-    <div className="flex flex-col">
-      <h1 className="text-3xl font-bold text-slate-900 mb-8">
-        Compare: Pattern {patterns.map((p) => p?.label).join(" vs ")}
-      </h1>
+    <div className="flex h-screen w-full overflow-hidden">
+      {patterns.map((pattern) => {
+        if (!pattern) return null;
+        const Component = pattern.component;
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {patterns.map((pattern) => {
-          if (!pattern) return null;
-          const Component = pattern.component;
-
-          return (
-            <div key={pattern.id} className="flex flex-col">
-              <div className="mb-6">
-                <h2 className="font-semibold text-slate-900 text-lg">
-                  Pattern {pattern.label}
-                </h2>
-                <p className="text-sm text-slate-600 mt-2">{pattern.descriptor}</p>
-              </div>
-
-              <div className="mb-8 flex-shrink-0">
-                <Component />
-              </div>
-
-              <div>
-                <GridBody />
-              </div>
-            </div>
-          );
-        })}
-      </div>
+        return (
+          <div
+            key={pattern.id}
+            className="relative flex-1 min-w-0 h-screen overflow-hidden border-r border-slate-200 last:border-r-0"
+          >
+            <span className="pointer-events-none absolute bottom-3 left-3 z-50 rounded-md bg-slate-900/80 px-2 py-1 text-xs font-semibold text-white">
+              Pattern {pattern.label}
+            </span>
+            <Component>
+              <GridBody />
+            </Component>
+          </div>
+        );
+      })}
     </div>
   );
 }

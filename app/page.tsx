@@ -26,7 +26,7 @@ export default function Home() {
     }
   };
 
-  const isFullBleed = currentMode === "single";
+  const isFullBleed = currentMode === "single" || currentMode === "compare";
 
   return (
     <div className="flex h-screen bg-slate-100 overflow-x-hidden">

@@ -2,12 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Mulish } from "next/font/google";
+import PatternAContent from "./PatternAContent";
 
 const mulish = Mulish({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
 });
 
+// Pattern A renders its own content-area component (Figma 73:8395) rather than the shared
+// GridBody — so the passed `children` (GridBody) is intentionally ignored for this pattern.
 interface PatternANavProps {
   children?: React.ReactNode;
 }
@@ -670,8 +673,11 @@ export default function PatternANav({ children }: PatternANavProps) {
           </div>
         </header>
 
-        {/* Content area */}
-        <main className="flex-1 overflow-y-auto px-10 py-10">{children}</main>
+        {/* Content area — Pattern A-specific data-table view (not the shared GridBody).
+            `children` is received (GridBody) but intentionally not rendered for this pattern. */}
+        <main className="flex-1 overflow-y-auto px-10 py-10">
+          <PatternAContent />
+        </main>
       </div>
     </div>
   );
