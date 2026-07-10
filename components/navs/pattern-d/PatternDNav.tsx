@@ -2,12 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Mulish, Noto_Sans } from "next/font/google";
+import PatternDContent from "./PatternDContent";
 
 const notoSans = Noto_Sans({ subsets: ["latin"], weight: ["400", "600", "700"] });
 const mulish = Mulish({ subsets: ["latin"], weight: ["400"] });
 
 const DIR = "/nav-patterns/pattern-d";
 
+// Pattern D renders its own content-area component (Figma 70:28308) rather than the shared
+// GridBody — so the passed `children` (GridBody) is intentionally ignored for this pattern.
 interface PatternDNavProps {
   children?: React.ReactNode;
 }
@@ -183,8 +186,11 @@ export default function PatternDNav({ children }: PatternDNavProps) {
         </div>
       </header>
 
-      {/* Content area */}
-      <main className="flex-1 overflow-y-auto px-6 py-6">{children}</main>
+      {/* Content area — Pattern D-specific dashboard (not the shared GridBody). `children`
+          is received (GridBody) but intentionally not rendered for this pattern. */}
+      <main className="flex-1 overflow-y-auto p-6">
+        <PatternDContent />
+      </main>
     </div>
   );
 }
