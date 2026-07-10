@@ -58,6 +58,10 @@ export default function SwitcherRail({
     <div
       className="fixed left-1/2 -translate-x-1/2 backdrop-blur-[6px] bg-white/80 rounded-[16px] shadow-[0px_4px_16px_0px_rgba(0,0,0,0.15)] flex items-center"
       style={{
+        // Highest stacking layer in the app: the pill is a persistent shell element and must
+        // overlay all mode content — including both side-by-side nav panels in Compare view,
+        // whose `relative` wrappers + z-50 popovers would otherwise paint over it.
+        zIndex: 9999,
         isolation: "isolate",
         padding: "16px",
         gap: "16px",
