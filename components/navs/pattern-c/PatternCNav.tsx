@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import PatternCContent from "./PatternCContent";
 
+// Pattern C renders its own content-area component (Figma 70:28741 — the Insights table)
+// rather than the shared GridBody, so the passed `children` is intentionally ignored here.
 interface PatternCNavProps {
   children?: React.ReactNode;
 }
@@ -388,7 +391,10 @@ export default function PatternCNav({ children }: PatternCNavProps) {
         </header>
 
         {/* Content area */}
-        <main className="flex-1 overflow-y-auto px-10 py-10">{children}</main>
+        {/* Pattern C-specific content (Insights table); `children` (GridBody) intentionally unused */}
+        <main className="flex-1 overflow-y-auto px-10 py-10">
+          <PatternCContent />
+        </main>
       </div>
     </div>
   );
