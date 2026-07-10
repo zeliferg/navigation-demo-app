@@ -1,7 +1,7 @@
 import PatternANav from "@/components/navs/pattern-a/PatternANav";
 import PatternBNav from "@/components/navs/pattern-b/PatternBNav";
 import PatternCNav from "@/components/navs/pattern-c/PatternCNav";
-import PatternD from "@/components/navs/pattern-d/PatternD";
+import PatternDNav from "@/components/navs/pattern-d/PatternDNav";
 
 export interface NavPattern {
   id: "a" | "b" | "c" | "d";
@@ -33,6 +33,6 @@ export const navPatterns: NavPattern[] = [
     id: "d",
     label: "Style D",
     descriptor: "Top-only nav with tabs, for flatter, filter-heavy IA.",
-    component: PatternD,
+    component: PatternDNav,
   },
 ];
